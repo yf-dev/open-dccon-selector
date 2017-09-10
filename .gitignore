@@ -3,7 +3,8 @@ source/node_modules/
 source/npm-debug.log*
 source/yarn-debug.log*
 source/yarn-error.log*
-/settings.env
-/docker-compose.nesswit-server.yml
-/backend/penv/
 .idea/
+/settings.env
+/backend/penv/
+/docker-compose.nesswit-server.yml
+/docker-compose.dev.nesswit-server-dev.yml
