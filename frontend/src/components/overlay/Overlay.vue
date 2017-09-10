@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @mouseout="containerMouseOut" @mouseover="containerMouseOver">
+  <div class="container" @mouseleave="containerMouseLeave" @mouseenter="containerMouseEnter">
     <div :class="{'invisible': !isHovered, 'visible': isHovered}">
       <button class="btn" @click.prevent="toggle">
         <i class="icon" :class="{'icon-cross': isOpened, 'icon-menu': !isOpened}"></i>
@@ -35,7 +35,6 @@
     },
     data() {
       return {
-        isHoveredNow: false,
         isHovered: false,
         isNotified: false,
         isOpened: false,
@@ -48,16 +47,15 @@
       };
     },
     created() {
-      this.dcconUrl = 'https://gist.githubusercontent.com/rishubil/2bbfa7028cff75b7a0fbdf532717d4b7/raw/7ce7ce9ebfe10074559cf4bc67c104a18f6f630c/xunz.json';
-      this.getDcconsFromUrl();
-//      if (window.Twitch.ext) {
-//        window.Twitch.ext.onAuthorized((auth) => {
-//          this.auth = auth;
-//          if (!this.isDcconLoading && this.dcconUrl === '' && this.dccons.length === 0) {
-//            this.getDccons();
-//          }
-//        });
-//      }
+      if (window.Twitch.ext) {
+        window.Twitch.ext.onAuthorized((auth) => {
+          this.auth = auth;
+          if (!this.isDcconLoading && this.dcconUrl === '' && this.dccons.length === 0) {
+            this.getDccons();
+          }
+        });
+      }
+
       // eslint-disable-next-line no-unused-vars
       const clipboard = new Clipboard('.clipboard');
     },
@@ -112,14 +110,14 @@
       },
       copy(keyword) {
         this.textForCopy = `~${keyword}`;
-        this.notice = `${this.textForCopy} 복사됨`;
+        this.notice = `${this.textForCopy} Copied`;
         this.isNotified = true;
         this.hideNofice();
         this.$nextTick(function f() {
           this.$refs.clipboard.click();
         });
       },
-      hideNofice: _.debounce(function hideNoficeInner() {
+      hideNofice: _.debounce(function hideNoticeInner() {
         if (this.isNotified) {
           this.isNotified = false;
         }
@@ -127,19 +125,14 @@
       dcconContainerMouseOut() {
         this.hoveredDccon = null;
       },
-      containerMouseOut() {
-        this.isHoveredNow = false;
-        this.debouncedContainerMouseOut();
+      containerMouseLeave() {
+        console.log('containerMouseLeave');
+        this.isHovered = false;
       },
-      containerMouseOver() {
-        this.isHoveredNow = true;
+      containerMouseEnter() {
+        console.log('containerMouseEnter');
         this.isHovered = true;
       },
-      debouncedContainerMouseOut: _.debounce(function containerMouseOutInner() {
-        if (!this.isHoveredNow) {
-          this.isHovered = false;
-        }
-      }, 1000),
     },
   };
 </script>
@@ -154,9 +147,7 @@
   $width-factor: 12;
 
   .container {
-    background: #000000;
-    padding-top: 100px;
-    padding-bottom: 80px;
+    margin: 100px 16px 80px 8px;
     min-height: 100vh;
   }
 
