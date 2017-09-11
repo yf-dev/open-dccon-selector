@@ -16,6 +16,7 @@ cors = CORS(app)
 from . import models
 from . import apis
 
+
 @app.route('/')
-def test(path):
+def index():
     return render_template("index.html")
