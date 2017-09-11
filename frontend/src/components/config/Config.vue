@@ -42,7 +42,7 @@
     methods: {
       getDcconUrl() {
         axios.get(
-          `https://open-dccon-selector.update.sh/api/dccon-url?token=${this.auth.token}`,
+          `https://${process.env.API_HOSTNAME}/api/dccon-url?token=${this.auth.token}`,
         )
           .then((response) => {
             if (response.status === 200) {
@@ -61,7 +61,7 @@
         this.isUpdating = true;
         this.result = '';
         axios.post(
-          'https://open-dccon-selector.update.sh/api/update-dccon-url',
+          'https://${process.env.API_HOSTNAME}/api/update-dccon-url',
           {
             token: this.auth.token,
             dcconUrl: this.dcconUrl,

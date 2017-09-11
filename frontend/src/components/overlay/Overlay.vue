@@ -63,7 +63,7 @@
       getDccons() {
         this.isDcconLoading = true;
         axios.get(
-          `https://open-dccon-selector.update.sh/api/dccon-url?token=${this.auth.token}`,
+          `https://${process.env.API_HOSTNAME}/api/dccon-url?token=${this.auth.token}`,
         )
           .then((response) => {
             if (response.status === 200) {

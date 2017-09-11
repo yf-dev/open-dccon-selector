@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  EXTENSION_VERSION: '"0.0.1"',
+  API_HOSTNAME: '"'+ process.env.API_HOSTNAME +'"',
 }
