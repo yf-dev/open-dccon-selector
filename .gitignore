@@ -7,4 +7,4 @@ source/yarn-error.log*
 /settings.env
 /backend/penv/
 /docker-compose.nesswit-server.yml
-/docker-compose.dev.nesswit-server-dev.yml
+/docker-compose.nesswit-server-dev.yml
