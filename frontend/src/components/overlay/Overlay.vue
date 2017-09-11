@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @mouseleave="containerMouseLeave" @mouseenter="containerMouseEnter">
+  <div class="container" @mouseleave="containerMouseLeave" @mousemove="containerMouseMove">
     <div :class="{'invisible': !isHovered, 'visible': isHovered}">
       <button class="btn" @click.prevent="toggle">
         <i class="icon" :class="{'icon-cross': isOpened, 'icon-menu': !isOpened}"></i>
@@ -128,8 +128,13 @@
       containerMouseLeave() {
         this.isHovered = false;
       },
-      containerMouseEnter() {
+      // eslint-disable-next-line prefer-arrow-callback
+      debouncedContainerMouseLeave: _.debounce(function containerMouseLeaveInner() {
+        this.isHovered = false;
+      }, 5000),
+      containerMouseMove() {
         this.isHovered = true;
+        this.debouncedContainerMouseLeave();
       },
     },
   };
@@ -145,7 +150,7 @@
   $width-factor: 12;
 
   .container {
-    margin: 100px 16px 80px 8px;
+    padding: 100px 16px 80px 8px;
     min-height: 100vh;
   }
 
