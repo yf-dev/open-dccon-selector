@@ -63,7 +63,7 @@
       getDccons() {
         this.isDcconLoading = true;
         axios.get(
-          `https://${process.env.API_HOSTNAME}/api/dccon-url?token=${this.auth.token}`,
+          `https://${process.env.API_HOSTNAME}/api/dccon-url?channel_id=${this.auth.channelId}`,
         )
           .then((response) => {
             if (response.status === 200) {
@@ -112,12 +112,12 @@
         this.textForCopy = `~${keyword}`;
         this.notice = `${this.textForCopy} Copied`;
         this.isNotified = true;
-        this.hideNofice();
+        this.hideNotice();
         this.$nextTick(function f() {
           this.$refs.clipboard.click();
         });
       },
-      hideNofice: _.debounce(function hideNoticeInner() {
+      hideNotice: _.debounce(function hideNoticeInner() {
         if (this.isNotified) {
           this.isNotified = false;
         }
@@ -126,11 +126,9 @@
         this.hoveredDccon = null;
       },
       containerMouseLeave() {
-        console.log('containerMouseLeave');
         this.isHovered = false;
       },
       containerMouseEnter() {
-        console.log('containerMouseEnter');
         this.isHovered = true;
       },
     },

@@ -80,18 +80,12 @@ class ApiUpdateDcconUrl(Resource):
 class ApiDcconUrl(Resource):
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('token', type=str, required=True)
+        parser.add_argument('channel_id', type=str, required=True)
         args = parser.parse_args()
 
-        token = args['token']
+        channel_id = args['channel_id']
 
-        try:
-            decoded_token = jwt.decode(token, TWITCH_EXTENSION_SECRET)
-        except jwt.InvalidTokenError as e:
-            # raise e
-            return 'Invalid token', 400
-
-        setting = Setting.query.filter_by(user_id=decoded_token['channel_id']).first()
+        setting = Setting.query.filter_by(user_id=channel_id).first()
         if not setting:
             return 'Not found', 404
         else:
