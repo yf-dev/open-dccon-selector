@@ -4486,9 +4486,15 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.0, rimraf@^2.6.1:
+rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
+  dependencies:
+    glob "^7.0.5"
+
+rimraf@^2.6.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.2.tgz#2ed8150d24a16ea8651e6d6ef0f47c4158ce7a36"
   dependencies:
     glob "^7.0.5"
 
@@ -4698,8 +4704,8 @@ spdx-license-ids@^1.0.2:
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-1.2.2.tgz#c9df7a3424594ade6bd11900d596696dc06bac57"
 
 spectre.css@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/spectre.css/-/spectre.css-0.4.0.tgz#cee1da557b0fa6a9cf7a8bd9d106cd0d46b12f38"
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/spectre.css/-/spectre.css-0.4.1.tgz#3a8ec7509f53e769d3b4bc332ec1fa1a9a4918fd"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
