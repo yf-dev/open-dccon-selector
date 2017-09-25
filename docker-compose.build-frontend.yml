@@ -1,0 +1,13 @@
+version: '2'
+services:
+  build:
+    build: ./frontend
+    env_file:
+      - settings.env
+    command: "build"
+    volumes:
+     - ./frontend:/frontend
+     - node-modules:/frontend/node_modules
+
+volumes:
+  node-modules:
