@@ -1,10 +1,12 @@
 .DS_Store
-source/node_modules/
-source/npm-debug.log*
-source/yarn-debug.log*
-source/yarn-error.log*
+*/__pycache__
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
 .idea/
 /settings.env
 /backend/penv/
+backend/flask/app/templates/
 /docker-compose.nesswit-server.yml
 /docker-compose.nesswit-server-dev.yml
