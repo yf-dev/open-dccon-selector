@@ -7,8 +7,7 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    { path: '/', name: 'index', redirect: { name: 'overlay' } },
-    { path: '/overlay', name: 'overlay', component: Overlay },
-    { path: '/config', name: 'config', component: Config },
+    { path: '*/overlay', name: 'overlay', component: Overlay },
+    { path: '*/config', name: 'config', component: Config },
   ],
 });
