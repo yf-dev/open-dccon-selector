@@ -12,7 +12,7 @@
 </script>
 
 <style lang="scss">
-  @import url('https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css');
+  @import "~typeface-nanum-barun-gothic/nanumbarungothic.css";
 
   #app {
     min-height: 100%;
