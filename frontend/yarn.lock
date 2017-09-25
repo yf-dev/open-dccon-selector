@@ -5010,10 +5010,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typeface-nanum-barun-gothic@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/typeface-nanum-barun-gothic/-/typeface-nanum-barun-gothic-1.0.0.tgz#ad1c245bee3cf174e68cb78de0c8ad2f13a9a65d"
-
 uglify-js@3.0.x:
   version "3.0.28"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.0.28.tgz#96b8495f0272944787b5843a1679aa326640d5f7"

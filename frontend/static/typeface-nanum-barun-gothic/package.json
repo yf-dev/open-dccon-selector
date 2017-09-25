@@ -1,0 +1,24 @@
+{
+  "name": "typeface-nanum-barun-gothic",
+  "version": "1.0.0",
+  "description": "A hangul gothic font which is created by nhn and optimized for mobile.",
+  "main": "nanumbarungothic.css",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HelloWorld017/NanumBarunGothic.git"
+  },
+  "keywords": [
+    "nanum",
+    "nanumbarungothic",
+    "nanumgothic"
+  ],
+  "author": "Naver",
+  "license": "OFL-1.1",
+  "bugs": {
+    "url": "https://github.com/HelloWorld017/NanumBarunGothic/issues"
+  },
+  "homepage": "https://github.com/HelloWorld017/NanumBarunGothic#readme"
+}
