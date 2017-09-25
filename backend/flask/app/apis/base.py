@@ -1,9 +1,12 @@
+import base64
 import os
 from datetime import datetime, timedelta
-from flask_restful import Resource, reqparse
+
 import jwt
 import requests
-import base64
+from flask_restful import Resource, reqparse
+from requests import HTTPError
+from twitch import TwitchClient
 
 from .. import api, db
 from ..models import Setting
@@ -11,6 +14,8 @@ from ..models import Setting
 TWITCH_EXTENSION_SECRET = base64.b64decode(os.environ['TWITCH_EXTENSION_SECRET'])
 TWITCH_EXTENSION_CLIENT_ID = os.environ['TWITCH_EXTENSION_CLIENT_ID']
 TWITCH_EXTENSION_VERSION = os.environ['TWITCH_EXTENSION_VERSION']
+
+client = TwitchClient(client_id=TWITCH_EXTENSION_CLIENT_ID)
 
 
 # noinspection PyMethodMayBeStatic
@@ -80,13 +85,28 @@ class ApiUpdateDcconUrl(Resource):
 class ApiDcconUrl(Resource):
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('channel_id', type=str, required=True)
+        parser.add_argument('channel_id', type=str, required=False)
+        parser.add_argument('channel_name', type=str, required=False)
         args = parser.parse_args()
 
-        channel_id = args['channel_id']
+        if 'channel_id' in args and args['channel_id']:
+            channel_id = args['channel_id']
+        elif 'channel_name' in args and args['channel_name']:
+            channel_name = args['channel_name']
+            try:
+                channels = client.users.translate_usernames_to_ids([channel_name])
+                if channels and len(channels) > 0:
+                    channel = channels[0]
+                    channel_id = channel.id
+                else:
+                    return 'Cannot convert channel_name ' + str(channel_name), 400
+            except HTTPError:
+                return 'Cannot convert channel_name ' + str(channel_name), 400
+        else:
+            return 'You must set channel_id or channel_name', 400
 
         setting = Setting.query.filter_by(user_id=channel_id).first()
         if not setting:
-            return 'Not found', 404
+            return 'Not found for channel_id ' + str(channel_id), 404
         else:
             return setting.json(), 200
