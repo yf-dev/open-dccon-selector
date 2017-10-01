@@ -17,6 +17,15 @@ from . import models
 from . import apis
 
 
+@app.route('/config')
+def index():
+    return render_template("config.html")
+
+@app.route('/overlay')
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("overlay.html")
+
+@app.route('/live-config')
+def index():
+    return render_template("live-config.html")

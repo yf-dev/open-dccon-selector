@@ -26,7 +26,17 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
+      filename: 'viewer.html',
+      template: 'index.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'config.html',
+      template: 'index.html',
+      inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'live-config.html',
       template: 'index.html',
       inject: true
     }),
