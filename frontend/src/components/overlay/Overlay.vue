@@ -63,7 +63,7 @@
       getDccons() {
         this.isDcconLoading = true;
         axios.get(
-          `https://${process.env.API_HOSTNAME}/api/dccon-url?channel_id=${this.auth.channelId}`,
+          `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
         )
           .then((response) => {
             if (response.status === 200) {

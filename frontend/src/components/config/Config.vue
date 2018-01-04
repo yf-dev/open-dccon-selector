@@ -42,7 +42,7 @@
     methods: {
       getDcconUrl() {
         axios.get(
-          `https://${process.env.API_HOSTNAME}/api/dccon-url?channel_id=${this.auth.channelId}`,
+          `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
         )
           .then((response) => {
             if (response.status === 200) {
@@ -61,7 +61,7 @@
         this.isUpdating = true;
         this.result = '';
         axios.post(
-          `https://${process.env.API_HOSTNAME}/api/update-dccon-url`,
+          `https://${process.env.API_HOSTNAME}/api/channels`,
           {
             token: this.auth.token,
             dcconUrl: this.dcconUrl,

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from . import db
+from . import db, api
 
 
 class CommonModel(object):
@@ -18,7 +18,9 @@ class CommonModel(object):
                     d[c.name] = "Error: Failed to covert using ", str(
                         convert[c.type])
             elif v is None:
-                if "INTEGER" == str(c.type) or "NUMERIC" == str(c.type):
+                if hasattr(c.type, '__visit_name__') and c.type.__visit_name__ == 'JSON':
+                    d[c.name] = None
+                elif "INTEGER" == str(c.type) or "NUMERIC" == str(c.type):
                     # print "??"
                     d[c.name] = 0
                 elif "DATETIME" == str(c.type):
@@ -38,13 +40,22 @@ class CommonModel(object):
         raise NotImplementedError()
 
 
-class Setting(db.Model, CommonModel):
-    __tablename__ = 'setting'
+class Channel(db.Model, CommonModel):
+    __tablename__ = 'channel'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Unicode(64, collation='c'), nullable=False, unique=True)
     dccon_url = db.Column(db.Unicode(512, collation='c'), nullable=True)
+    last_cache_update = db.Column(db.DateTime(), nullable=True)
+    is_using_cache = db.Column(db.Boolean(), nullable=False, default=False)
+    cached_dccon = db.Column(db.JSON(), nullable=True)
 
     def json(self):
-        setting = self._serialize()
-        setting.pop('id')
-        return setting
+        channel = self._serialize()
+        channel.pop('id')
+        channel.pop('cached_dccon')
+        if self.is_using_cache:
+            channel['dccon_url'] = self.cached_dccon_url()
+        return channel
+
+    def cached_dccon_url(self):
+        return api.url_for('cached_dccon') + '?user_id=' + str(self.user_id)
