@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:9.6
     volumes:
-      - ./database/postgresql:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     restart: unless-stopped
     env_file:
       - settings.env
@@ -16,8 +16,10 @@ services:
     build: ./backend
     links:
       - db
-    expose:
-      - "8088"
+#    expose:
+#      - "8088"
+    ports:
+      - "8088:8088"
     command: python3 debug.py
     tty: true
     env_file:
@@ -27,21 +29,12 @@ services:
       - ./backend/flask.conf:/etc/nginx/sites-available/flask.conf:ro
       - ./backend/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf:ro
       - ./frontend/dist/static:/var/www/flask/app/static:ro
-      - ./frontend/dist/index.html:/var/www/flask/app/templates/index.html:ro
-      - ./frontend/dist/sammi-color.manifest:/var/www/flask/app/templates/sammi-color.manifest:ro
+      - ./frontend/dist/config.html:/var/www/flask/app/templates/config.html:ro
+      - ./frontend/dist/viewer.html:/var/www/flask/app/templates/viewer.html:ro
+      - ./frontend/dist/live-config.html:/var/www/flask/app/templates/live-config.html:ro
       - ./log/uwsgi:/var/log/uwsgi
       - ./log/nginx:/var/log/nginx
     restart: unless-stopped
 
-  web:
-    build: ./frontend
-    expose:
-      - "8080"
-    env_file:
-      - settings.env
-    volumes:
-     - ./frontend:/frontend
-     - node-modules:/frontend/node_modules
-
 volumes:
-  node-modules:
+  db-data:

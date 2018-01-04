@@ -18,14 +18,14 @@ from . import apis
 
 
 @app.route('/config')
-def index():
+def config():
     return render_template("config.html")
 
 @app.route('/overlay')
 @app.route('/')
-def index():
-    return render_template("overlay.html")
+def overlay():
+    return render_template("viewer.html")
 
 @app.route('/live-config')
-def index():
+def live_config():
     return render_template("live-config.html")
