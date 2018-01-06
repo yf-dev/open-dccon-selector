@@ -1,10 +1,7 @@
-from datetime import datetime
-
 from flask_restful import Resource, reqparse
 
 from .. import api
-from ..consts import CACHED_DCCON_UPDATE_DELTA
-from .common import get_channel, get_channel_by_user_id, update_cached_dccon
+from .common import get_channel
 
 
 # noinspection PyMethodMayBeStatic
@@ -28,32 +25,10 @@ class ApiDcconUrl(Resource):
         if 'channel_name' in args and args['channel_name']:
             channel_name = args['channel_name']
 
-        setting = get_channel(user_id, channel_name)
-        setting_data = setting.json()
+        channel = get_channel(user_id, channel_name)
+        channel_data = channel.json()
         filtered = {
-            'user_id': setting_data['user_id'],
-            'dccon_url': setting_data['dccon_url']
+            'user_id': channel_data['user_id'],
+            'dccon_url': channel_data['dccon_url']
         }
         return filtered, 200
-
-
-# noinspection PyMethodMayBeStatic
-@api.resource('/cached-dccon.json')
-class ApiCachedDccon(Resource):
-    def get(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('user_id', type=str, required=True)
-        args = parser.parse_args()
-
-        user_id = args['user_id']
-        setting = get_channel_by_user_id(user_id)
-
-        if not setting.last_cache_update:
-            update_cached_dccon(setting)
-        else:
-            utc_now = datetime.utcnow()
-            checkpoint = setting.last_cache_update + CACHED_DCCON_UPDATE_DELTA
-            if checkpoint < utc_now:
-                update_cached_dccon(setting)
-
-        return setting.cached_dccon, 200

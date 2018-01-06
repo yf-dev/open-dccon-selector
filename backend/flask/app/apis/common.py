@@ -29,10 +29,10 @@ def get_channel(user_id, channel_name):
 
 
 def get_channel_by_user_id(user_id):
-    setting = Channel.query.filter_by(user_id=user_id).first()
-    if not setting:
+    channel = Channel.query.filter_by(user_id=user_id).first()
+    if not channel:
         abort(404, 'Not found for channel_id ' + str(user_id))
-    return setting
+    return channel
 
 
 def decode_twitch_token(token):
@@ -90,8 +90,14 @@ def update_cached_dccon(channel):
     channel.cached_dccon = dccon_json
     channel.last_cache_update = datetime.utcnow()
 
+    update_db()
+
+
+def update_db():
+    # noinspection PyBroadException
     try:
         db.session.commit()
+        db.session.flush()
     except:
         db.session.rollback()
         abort(500, 'Cannot update database')

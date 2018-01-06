@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from . import db, api
+from . import db
 
 
 class CommonModel(object):
@@ -58,4 +58,4 @@ class Channel(db.Model, CommonModel):
         return channel
 
     def cached_dccon_url(self):
-        return api.url_for('cached_dccon') + '?user_id=' + str(self.user_id)
+        return '/api/channel/{}/cached-dccon'.format(self.user_id)
