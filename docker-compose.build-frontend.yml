@@ -4,7 +4,7 @@ services:
     build: ./frontend
     env_file:
       - settings.env
-    command: "build"
+    command: "yarn build"
     volumes:
      - ./frontend:/frontend
      - node-modules:/frontend/node_modules

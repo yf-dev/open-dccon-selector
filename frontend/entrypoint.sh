@@ -5,7 +5,7 @@ cd /frontend
 
 if [ ! -z $1 ]
 then
-  exec yarn $@
+  exec $@
 else
   yarn install
   exec yarn start
