@@ -6,7 +6,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 rm -r ./frontend/dist/*
-docker-compose -f docker-compose.build-frontend.yml up
+docker-compose -f docker-compose.build-frontend.yml run --rm build
 cd ./frontend/dist
 zip -r ods-$(date +'%Y%m%d-%H%M%S').zip ./*
 
