@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="columns submit-button-group">
-          <button class="btn" :class="{'btn-primary': !isUpdating}" @click.prevent="submit">Submit</button>
+          <button class="btn" :class="{'btn-primary': !isUpdating && canSubmit}" @click.prevent="submit">Submit</button>
           <p id="updateResult" v-if="result">{{ result }}</p>
         </div>
       </div>
@@ -34,6 +34,7 @@
         dcconUrl: '',
         result: '',
         isUpdating: true,
+        canSubmit: false,
       };
     },
     created() {
@@ -46,6 +47,7 @@
     },
     methods: {
       getDcconUrl() {
+        console.log(process.env.API_HOSTNAME);
         axios.get(
           `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
         )
@@ -56,14 +58,17 @@
               this.dcconUrl = '';
             }
             this.isUpdating = false;
+            this.canSubmit = true;
           })
           .catch(() => {
             this.result = 'Cannot connect to server';
             this.isUpdating = false;
+            this.canSubmit = false;
           });
       },
       updateDcconUrl() {
         this.isUpdating = true;
+        this.canSubmit = false;
         this.result = '';
         axios.post(
           `https://${process.env.API_HOSTNAME}/api/channels`,
@@ -79,17 +84,19 @@
               this.result = 'Cannot Saved';
             }
             this.isUpdating = false;
+            this.canSubmit = true;
           })
           .catch(() => {
             this.result = 'Server Error';
             this.isUpdating = false;
+            this.canSubmit = true;
           });
       },
       inputDcconUrl(e) {
         this.dcconUrl = e.target.value;
       },
       submit() {
-        if (!this.isUpdating) {
+        if (!this.isUpdating && this.canSubmit) {
           this.updateDcconUrl();
         }
       },
