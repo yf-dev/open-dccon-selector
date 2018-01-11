@@ -20,9 +20,6 @@
 
 <script>
   import axios from 'axios';
-  import loadFont from '../../common';
-
-  loadFont();
 
   // noinspection JSUnusedGlobalSymbols
   export default {
@@ -47,7 +44,6 @@
     },
     methods: {
       getDcconUrl() {
-        console.log(process.env.API_HOSTNAME);
         axios.get(
           `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
         )

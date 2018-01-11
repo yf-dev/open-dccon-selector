@@ -28,9 +28,6 @@
   import Clipboard from 'clipboard';
   import _ from 'lodash';
   import Dccon from './Dccon';
-  import loadFont from '../../common';
-
-  loadFont();
 
   // noinspection JSUnusedGlobalSymbols
   export default {
