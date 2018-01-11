@@ -8,7 +8,7 @@ from twitch import TwitchClient
 from . import config as config
 from .consts import TWITCH_EXTENSION_CLIENT_ID
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='/frontend/dist/static', template_folder='/frontend/dist/templates')
 app.config.from_object(config)
 db = SQLAlchemy(app)
 api = Api(app)

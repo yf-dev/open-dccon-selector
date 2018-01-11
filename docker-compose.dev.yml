@@ -31,8 +31,7 @@ services:
       - ./backend/localhost-ssl.crt:/etc/ssl/private/localhost-ssl.crt:ro
       - ./backend/localhost-ssl.key:/etc/ssl/private/localhost-ssl.key:ro
       - ./backend/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf:ro
-      - ./frontend/dist/static:/var/www/flask/app/static:ro
-      - ./frontend/dist/templates:/var/www/flask/app/templates:ro
+      - ./frontend/dist:/frontend/dist:ro
       - ./log/uwsgi:/var/log/uwsgi
       - ./log/nginx:/var/log/nginx
     restart: unless-stopped
