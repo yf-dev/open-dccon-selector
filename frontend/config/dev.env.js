@@ -3,5 +3,5 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_HOSTNAME: '"localhost"'
+  API_HOSTNAME: '"localhost:8088"'
 })
