@@ -1,7 +1,8 @@
 require('./check-versions')()
 
 var webpackConfig = null;
-if (process.argv.length >= 3 && process.argv[2] === 'dev-watch') {
+var isDevWatch = process.argv.length >= 3 && process.argv[2] === 'dev-watch';
+if (isDevWatch) {
   console.log('Trying to build for development')
   process.env.NODE_ENV = 'development'
   webpackConfig = require('./webpack.dev-watch.conf')
@@ -34,7 +35,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       chunkModules: false
     }) + '\n\n')
 
-    if (stats.hasErrors()) {
+    if (stats.hasErrors() && !isDevWatch) {
       console.log(chalk.red('  Build failed with errors.\n'))
       process.exit(1)
     }
