@@ -1,10 +1,12 @@
-export default function loadFont() {
-  let p = location.pathname.split('/');
-  p.pop();
-  p = `${p.join('/')}/static/spoqa-han-sans/SpoqaHanSans-kr.css`;
-  const link = document.createElement('link');
-  link.href = p;
-  link.type = 'text/css';
-  link.rel = 'stylesheet';
-  document.getElementsByTagName('head')[0].appendChild(link);
+export default function getParameterByName(name, url) {
+  let tUrl = url;
+  if (!tUrl) {
+    tUrl = window.location.href;
+  }
+  const tName = name.replace(/[[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${tName}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(tUrl);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

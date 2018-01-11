@@ -11,6 +11,17 @@ from ..utils import twitch_channel_name_to_id
 from ..models import Channel
 
 
+def parse_bool(val):
+    if val is None:
+        return val
+    elif val is 1:
+        return True
+    elif val is 0:
+        return False
+    else:
+        abort(400, 'Boolean value must be one of 1 or 0.')
+
+
 def get_channel(user_id, channel_name):
     if user_id and channel_name:
         abort(400, 'Cannot set channel_id and channel_name at the same time.')
@@ -75,7 +86,11 @@ def update_twitch_rc(decoded_token, rc):
     except HTTPError:
         abort(400, 'Cannot update required configuration for twitch')
 
-    return r.content.decode("utf-8"), r.status_code
+    res = r.content.decode("utf-8")
+    code = r.status_code
+
+    if code // 100 != 2:
+        abort(code, 'Twitch required_configuration failed: {res}'.format(res=res))
 
 
 def update_cached_dccon(channel):
@@ -93,11 +108,13 @@ def update_cached_dccon(channel):
     update_db()
 
 
-def update_db():
+def update_db(cb_rollback=None):
     # noinspection PyBroadException
     try:
         db.session.commit()
         db.session.flush()
     except:
         db.session.rollback()
+        if cb_rollback:
+            cb_rollback()
         abort(500, 'Cannot update database')

@@ -6,7 +6,7 @@
           <div class="form-group">
             <label class="form-label" for="inputDcconUrl">Dccon URL (Required)</label>
             <input class="form-input" type="text" id="inputDcconUrl" placeholder="https://..."
-                   @input="inputDcconUrl" :value="dcconUrl"/>
+                   @input="inputDcconUrl" :value="channelData.dccon_url"/>
           </div>
         </div>
         <div class="columns submit-button-group">
@@ -20,6 +20,7 @@
 
 <script>
   import axios from 'axios';
+  import getParameterByName from '../../common';
 
   // noinspection JSUnusedGlobalSymbols
   export default {
@@ -28,7 +29,7 @@
     data() {
       return {
         auth: {},
-        dcconUrl: '',
+        channelData: {},
         result: '',
         isUpdating: true,
         canSubmit: false,
@@ -36,6 +37,11 @@
     },
     created() {
       if (window.Twitch.ext) {
+        this.auth.channelId = getParameterByName('id');
+        this.auth.token = getParameterByName('token');
+        if (this.auth.channelId !== null && this.auth.token !== null) {
+          this.getDcconUrl();
+        }
         window.Twitch.ext.onAuthorized((auth) => {
           this.auth = auth;
           this.getDcconUrl();
@@ -44,25 +50,35 @@
     },
     methods: {
       getDcconUrl() {
+        this.isUpdating = true;
+        this.canSubmit = false;
         axios.get(
-          `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
+          `https://${process.env.API_HOSTNAME}/api/channel/${this.auth.channelId}?token=${this.auth.token}`,
         )
           .then((response) => {
             if (response.status === 200) {
-              this.dcconUrl = response.data.dccon_url;
-            } else if (response.status === 404) {
-              this.dcconUrl = '';
+              this.channelData = response.data;
+              this.isUpdating = false;
+              this.canSubmit = true;
             }
-            this.isUpdating = false;
-            this.canSubmit = true;
           })
-          .catch(() => {
-            this.result = 'Cannot connect to server';
-            this.isUpdating = false;
-            this.canSubmit = false;
+          .catch((error) => {
+            if (error.response.status === 404) {
+              this.channelData = {};
+              this.isUpdating = false;
+              this.canSubmit = false;
+              this.createChannel();
+            } else {
+              this.result = 'Cannot connect to server';
+              this.isUpdating = false;
+              this.canSubmit = false;
+            }
           });
       },
-      updateDcconUrl() {
+      createChannel() {
+        if (this.isUpdating) {
+          return;
+        }
         this.isUpdating = true;
         this.canSubmit = false;
         this.result = '';
@@ -70,15 +86,36 @@
           `https://${process.env.API_HOSTNAME}/api/channels`,
           {
             token: this.auth.token,
-            dcconUrl: this.dcconUrl,
           },
         )
           .then((response) => {
-            if (response.status === 204) {
-              this.result = 'Saved';
-            } else {
-              this.result = 'Cannot Saved';
-            }
+            this.channelData = response.data;
+            this.isUpdating = false;
+            this.canSubmit = true;
+          })
+          .catch(() => {
+            this.result = 'Server Error';
+            this.isUpdating = false;
+            this.canSubmit = false;
+          });
+      },
+      updateDcconUrl() {
+        if (this.isUpdating) {
+          return;
+        }
+        this.isUpdating = true;
+        this.canSubmit = false;
+        this.result = '';
+        axios.put(
+          `https://${process.env.API_HOSTNAME}/api/channel/${this.auth.channelId}`,
+          {
+            token: this.auth.token,
+            dccon_url: this.channelData.dccon_url,
+          },
+        )
+          .then((response) => {
+            this.channelData = response.data;
+            this.result = 'Saved';
             this.isUpdating = false;
             this.canSubmit = true;
           })
@@ -89,10 +126,10 @@
           });
       },
       inputDcconUrl(e) {
-        this.dcconUrl = e.target.value;
+        this.channelData.dccon_url = e.target.value;
       },
       submit() {
-        if (!this.isUpdating && this.canSubmit) {
+        if (this.canSubmit) {
           this.updateDcconUrl();
         }
       },
