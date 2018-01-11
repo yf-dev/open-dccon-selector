@@ -28,6 +28,7 @@
   import Clipboard from 'clipboard';
   import _ from 'lodash';
   import Dccon from './Dccon';
+  import getParameterByName from '../../common';
 
   // noinspection JSUnusedGlobalSymbols
   export default {
@@ -37,6 +38,7 @@
     },
     data() {
       return {
+        auth: {},
         isHovered: false,
         isNotified: false,
         isOpened: false,
@@ -50,6 +52,10 @@
     },
     created() {
       if (window.Twitch.ext) {
+        this.auth.channelId = getParameterByName('id');
+        if (this.auth.channelId !== null) {
+          this.getDccons();
+        }
         window.Twitch.ext.onAuthorized((auth) => {
           this.auth = auth;
           if (!this.isDcconLoading && this.dcconUrl === '' && this.dccons.length === 0) {
@@ -68,17 +74,11 @@
           `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
         )
           .then((response) => {
-            if (response.status === 200) {
-              this.dcconUrl = response.data.dccon_url;
-              this.getDcconsFromUrl();
-            } else if (response.status === 404) {
-              this.dcconUrl = '';
-              this.isDcconLoading = false;
-            } else {
-              this.isDcconLoading = false;
-            }
+            this.dcconUrl = response.data.dccon_url;
+            this.getDcconsFromUrl();
           })
           .catch(() => {
+            this.dcconUrl = '';
             this.isDcconLoading = false;
           });
       },
@@ -88,9 +88,7 @@
           this.dcconUrl,
         )
           .then((response) => {
-            if (response.status === 200) {
-              this.dccons = response.data.dccons;
-            }
+            this.dccons = response.data.dccons;
             this.isDcconLoading = false;
           })
           .catch(() => {
