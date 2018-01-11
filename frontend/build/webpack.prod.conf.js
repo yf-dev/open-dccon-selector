@@ -46,12 +46,12 @@ var webpackConfig = merge(baseWebpackConfig, {
     //     safe: true
     //   }
     // }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
+    // generate dist each html files with correct asset hash for caching.
+    // you can customize output by editing each html files
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.config,
-      template: 'index.html',
+      template: 'config.html',
       inject: true,
       minify: false,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
@@ -59,7 +59,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       filename: config.build.viewer,
-      template: 'index.html',
+      template: 'viewer.html',
       inject: true,
       minify: false,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
@@ -67,7 +67,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       filename: config.build.liveConfig,
-      template: 'index.html',
+      template: 'live-config.html',
       inject: true,
       minify: false,
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin

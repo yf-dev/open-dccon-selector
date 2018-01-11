@@ -26,12 +26,12 @@ def index():
 
 @app.route('/config')
 def config():
-    return render_template("config.html")
+    return render_template('config.html')
 
 @app.route('/overlay')
 def overlay():
-    return render_template("viewer.html")
+    return render_template('viewer.html')
 
 @app.route('/live-config')
 def live_config():
-    return render_template("live-config.html")
+    return render_template('live-config.html')

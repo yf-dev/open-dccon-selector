@@ -4,9 +4,9 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    viewer: path.resolve(__dirname, '../dist/viewer.html'),
-    config: path.resolve(__dirname, '../dist/config.html'),
-    liveConfig: path.resolve(__dirname, '../dist/live-config.html'),
+    viewer: path.resolve(__dirname, '../dist/templates/viewer.html'),
+    config: path.resolve(__dirname, '../dist/templates/config.html'),
+    liveConfig: path.resolve(__dirname, '../dist/templates/live-config.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',

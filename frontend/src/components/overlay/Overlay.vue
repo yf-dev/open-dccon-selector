@@ -1,23 +1,25 @@
 <template>
-  <div class="container" @mouseleave="containerMouseLeave" @mousemove="containerMouseMove">
-    <div :class="{'invisible': !isHovered, 'visible': isHovered}">
-      <button class="btn" @click.prevent="toggle">
-        <i class="icon" :class="{'icon-cross': isOpened, 'icon-menu': !isOpened}"></i>
-      </button>
-      <p class="notice" :class="{'invisible': !isNotified, 'visible': isNotified}">{{notice}}</p>
-      <div class="float-view" :class="{'hide': !isOpened}">
-        <div class="dccon-scroll" @mouseout="dcconContainerMouseOut">
-          <div class="dccon-container">
-            <dccon v-for="dccon in dccons" :key="dccon.keywords[0]" :dccon="dccon"
-                   @click="clickDccon" @hover="hoverDccon"></dccon>
+  <div id="viewer" class="app">
+    <div class="container" @mouseleave="containerMouseLeave" @mousemove="containerMouseMove">
+      <div :class="{'invisible': !isHovered, 'visible': isHovered}">
+        <button class="btn" @click.prevent="toggle">
+          <i class="icon" :class="{'icon-cross': isOpened, 'icon-menu': !isOpened}"></i>
+        </button>
+        <p class="notice" :class="{'invisible': !isNotified, 'visible': isNotified}">{{notice}}</p>
+        <div class="float-view" :class="{'hide': !isOpened}">
+          <div class="dccon-scroll" @mouseout="dcconContainerMouseOut">
+            <div class="dccon-container">
+              <dccon v-for="dccon in dccons" :key="dccon.keywords[0]" :dccon="dccon"
+                     @click="clickDccon" @hover="hoverDccon"></dccon>
+            </div>
+          </div>
+          <div class="preview" v-if="hoveredDccon !== null">
+            <img :src="hoveredDccon.path" :alt="hoveredDccon.keywords[0]">
           </div>
         </div>
-        <div class="preview" v-if="hoveredDccon !== null">
-          <img :src="hoveredDccon.path" :alt="hoveredDccon.keywords[0]">
-        </div>
       </div>
+      <button ref="clipboard" class="clipboard" :data-clipboard-text="textForCopy"></button>
     </div>
-    <button ref="clipboard" class="clipboard" :data-clipboard-text="textForCopy"></button>
   </div>
 </template>
 
@@ -26,6 +28,9 @@
   import Clipboard from 'clipboard';
   import _ from 'lodash';
   import Dccon from './Dccon';
+  import loadFont from '../../common';
+
+  loadFont();
 
   // noinspection JSUnusedGlobalSymbols
   export default {

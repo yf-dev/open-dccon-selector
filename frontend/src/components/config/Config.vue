@@ -1,16 +1,18 @@
 <template>
-  <div class="background">
-    <div class="container">
-      <div class="columns">
-        <div class="form-group">
-          <label class="form-label" for="inputDcconUrl">Dccon URL (Required)</label>
-          <input class="form-input" type="text" id="inputDcconUrl" placeholder="https://..."
-                 @input="inputDcconUrl" :value="dcconUrl"/>
+  <div id="config" class="app">
+    <div class="background">
+      <div class="container">
+        <div class="columns">
+          <div class="form-group">
+            <label class="form-label" for="inputDcconUrl">Dccon URL (Required)</label>
+            <input class="form-input" type="text" id="inputDcconUrl" placeholder="https://..."
+                   @input="inputDcconUrl" :value="dcconUrl"/>
+          </div>
         </div>
-      </div>
-      <div class="columns submit-button-group">
-        <button class="btn" :class="{'btn-primary': !isUpdating}" @click.prevent="submit">Submit</button>
-        <p id="updateResult" v-if="result">{{ result }}</p>
+        <div class="columns submit-button-group">
+          <button class="btn" :class="{'btn-primary': !isUpdating}" @click.prevent="submit">Submit</button>
+          <p id="updateResult" v-if="result">{{ result }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -18,6 +20,9 @@
 
 <script>
   import axios from 'axios';
+  import loadFont from '../../common';
+
+  loadFont();
 
   // noinspection JSUnusedGlobalSymbols
   export default {
