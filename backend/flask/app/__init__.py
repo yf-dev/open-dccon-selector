@@ -8,7 +8,7 @@ from twitch import TwitchClient
 from . import config as config
 from .consts import TWITCH_EXTENSION_CLIENT_ID
 
-app = Flask(__name__, static_folder='/frontend/dist/static', template_folder='/frontend/dist/templates')
+app = Flask(__name__, static_folder='/frontend/dist/static', template_folder='/frontend/dist')
 app.config.from_object(config)
 db = SQLAlchemy(app)
 api = Api(app)
@@ -24,14 +24,14 @@ from . import apis
 def index():
     return redirect(url_for('overlay'))
 
-@app.route('/config')
+@app.route('/config.html')
 def config():
     return render_template('config.html')
 
-@app.route('/overlay')
+@app.route('/viewer.html')
 def overlay():
     return render_template('viewer.html')
 
-@app.route('/live-config')
+@app.route('/live-config.html')
 def live_config():
     return render_template('live-config.html')
