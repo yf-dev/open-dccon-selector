@@ -12,7 +12,7 @@ Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 �
 
 ## 디시콘 채팅을 방송에 적용하는 법
 
-현재는 오픈소스로 공개된 JSAssist Open DCcon과 ChatAssistX를 사용할 수 있습니다.
+현재는 오픈소스로 공개된 JSAssist Open DCcon과 ChatAssistX-Client를 사용할 수 있습니다.
 두 프로그램 모두 JSAssist와 함께 사용하는 프로그램입니다.
 (JSAssist는 스트리머가 방송 화면에 채팅 메시지를 띄우기 위해 사용하는 프로그램 중 하나입니다.)
 
@@ -20,7 +20,7 @@ Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 �
 
 - JSAssist: http://js-almighty.com/jsassist/
 - JSAssist Open DCcon: https://github.com/rishubil/jsassist-open-dccon
-- ChatAssistX: https://github.com/Lastorder-DC/ChatAssistX-Client
+- ChatAssistX-Client: https://github.com/Lastorder-DC/ChatAssistX-Client
 
 ## Open Dccon Selector를 만든 이유
 
