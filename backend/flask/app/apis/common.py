@@ -2,7 +2,7 @@ import jwt
 import json
 import requests
 from datetime import datetime, timedelta
-from requests import HTTPError
+from requests.exceptions import RequestException
 from flask import abort
 
 from .. import db
@@ -33,7 +33,7 @@ def get_channel(user_id, channel_name):
             user_id = twitch_channel_name_to_id(channel_name)
             if user_id is None:
                 abort(400, 'Cannot convert channel_name ' + str(channel_name))
-        except HTTPError:
+        except RequestException:
             abort(400, 'Cannot convert channel_name ' + str(channel_name))
 
     return get_channel_by_user_id(user_id)
@@ -82,8 +82,8 @@ def update_twitch_rc(decoded_token, rc):
         }, headers={
             'Authorization': 'Bearer ' + new_token,
             'Client-Id': TWITCH_EXTENSION_CLIENT_ID
-        })
-    except HTTPError:
+        }, timeout=5)
+    except RequestException:
         abort(400, 'Cannot update required configuration for twitch')
 
     res = r.content.decode("utf-8")
@@ -94,11 +94,11 @@ def update_twitch_rc(decoded_token, rc):
 
 
 def update_cached_dccon(channel):
-    r = requests.get(channel.dccon_url)
+    r = requests.get(channel.dccon_url, timeout=5)
 
     dccon_json = None
     try:
-        dccon_json = json.loads(r.content.decode('utf-8'))
+        dccon_json = json.loads(r.content.decode('utf-8-sig'))
     except json.JSONDecodeError as e:
         abort(400, 'Cannot decode json from ' + str(channel.dccon_url))
 

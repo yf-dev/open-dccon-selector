@@ -37,7 +37,7 @@ class ApiDcconUrl(Resource):
         channel_data = channel.json()
         filtered = {
             'user_id': channel_data['user_id'],
-            'dccon_url': channel_data['dccon_url']
+            'dccon_url': channel_data['cached_dccon_url'] if channel.is_using_cache else channel_data['dccon_url']
         }
         return filtered, 200
 
@@ -45,9 +45,9 @@ class ApiDcconUrl(Resource):
 def get_data_from_url(url):
     r = None
     try:
-        r = requests.get(url)
-    except requests.HTTPError:
-        abort(500, 'Cannot get data from url')
+        r = requests.get(url, timeout=5)
+    except requests.exceptions.RequestException:
+        abort(500, 'Cannot get data from url: {url}'.format(url=url))
 
     return r.content
 
@@ -77,31 +77,31 @@ def parse_open_dccon(data):
     dccon_data = DcconData()
     for index, dccon in enumerate(data_json['dccons']):
         if 'keywords' not in dccon:
-            abort(500, 'Invalid data format: cannot find "keywords" on {index}th dccon'.format(index=index))
+            abort(500, 'Invalid data format: cannot find "keywords" on {index}th dccon'.format(index=index + 1))
         if 'tags' not in dccon:
-            abort(500, 'Invalid data format: cannot find "tags" on {index}th dccon'.format(index=index))
+            abort(500, 'Invalid data format: cannot find "tags" on {index}th dccon'.format(index=index + 1))
         if 'path' not in dccon:
-            abort(500, 'Invalid data format: cannot find "path" on {index}th dccon'.format(index=index))
+            abort(500, 'Invalid data format: cannot find "path" on {index}th dccon'.format(index=index + 1))
 
         keywords = dccon['keywords']
         tags = dccon['tags']
         path = dccon['path']
 
         if not isinstance(keywords, list):
-            abort(500, 'Invalid data format: "keywords" on {index}th dccon must be list'.format(index=index))
+            abort(500, 'Invalid data format: "keywords" on {index}th dccon must be list'.format(index=index + 1))
         if not isinstance(tags, list):
-            abort(500, 'Invalid data format: "tags" on {index}th dccon must be list'.format(index=index))
+            abort(500, 'Invalid data format: "tags" on {index}th dccon must be list'.format(index=index + 1))
         if not isinstance(path, str):
-            abort(500, 'Invalid data format: "path" on {index}th dccon must be string'.format(index=index))
+            abort(500, 'Invalid data format: "path" on {index}th dccon must be string'.format(index=index + 1))
 
         for keyword in keywords:
             if not isinstance(keyword, str):
                 abort(500,
-                      'Invalid data format: "keywords" on {index}th dccon must be list of string'.format(index=index))
+                      'Invalid data format: "keywords" on {index}th dccon must be list of string'.format(index=index + 1))
 
         for tag in tags:
             if not isinstance(tag, str):
-                abort(500, 'Invalid data format: "tags" on {index}th dccon must be list of string'.format(index=index))
+                abort(500, 'Invalid data format: "tags" on {index}th dccon must be list of string'.format(index=index + 1))
 
         dccon_data.add_dccon(keywords, path, tags)
 
@@ -130,7 +130,7 @@ def parse_funzinnu(data):
     for index, pair in enumerate(data_json.items()):
         keyword, url = pair
         if not isinstance(url, str):
-            abort(500, 'Invalid data format: {index}th dccon\'s value must be string'.format(index=index))
+            abort(500, 'Invalid data format: {index}th dccon\'s value must be string'.format(index=index + 1))
         dccon_data.add_dccon([keyword], url)
 
     return dccon_data.json_data

@@ -68,7 +68,7 @@ class Channel(db.Model, CommonModel):
         channel.pop('id')
         channel.pop('cached_dccon')
         if self.is_using_cache:
-            channel['dccon_url'] = self.cached_dccon_url()
+            channel['cached_dccon_url'] = self.cached_dccon_url()
         return channel
 
     def cached_dccon_url(self):
