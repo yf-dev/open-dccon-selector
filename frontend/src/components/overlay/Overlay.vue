@@ -10,7 +10,7 @@
           <div class="dccon-scroll" @mouseout="dcconContainerMouseOut">
             <div class="dccon-container">
               <dccon v-for="dccon in dccons" :key="dccon.keywords[0]" :dccon="dccon"
-                     @click="clickDccon" @hover="hoverDccon"></dccon>
+                     @click="clickDccon" @hover="hoverDccon"/>
             </div>
           </div>
           <div class="preview" v-if="hoveredDccon !== null">
