@@ -42,9 +42,23 @@ class CommonModel(object):
 
 class Channel(db.Model, CommonModel):
     __tablename__ = 'channel'
+
+    DCCON_TYPE_OPEN_DCCON = 'open_dccon'
+    DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH = 'open_dccon_rel_path'
+    DCCON_TYPE_FUNZINNU = 'funzinnu'
+    DCCON_TYPE_TELK = 'telk'
+
+    DCCON_TYPES = (
+        DCCON_TYPE_OPEN_DCCON,
+        DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH,
+        DCCON_TYPE_FUNZINNU,
+        DCCON_TYPE_TELK
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Unicode(64, collation='c'), nullable=False, unique=True)
     dccon_url = db.Column(db.Unicode(512, collation='c'), nullable=True)
+    dccon_type = db.Column(db.Unicode(32, collation='c'), nullable=False, default=DCCON_TYPE_OPEN_DCCON)
     last_cache_update = db.Column(db.DateTime(), nullable=True)
     is_using_cache = db.Column(db.Boolean(), nullable=False, default=False)
     cached_dccon = db.Column(db.JSON(), nullable=True)

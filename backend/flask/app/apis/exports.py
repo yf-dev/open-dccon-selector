@@ -1,11 +1,13 @@
 from collections import OrderedDict
 import requests
 import json
+from urllib.parse import urljoin
 
 from flask import abort
 from flask_restful import Resource, reqparse
 
 from .. import api
+from ..models import Channel
 from ..dccon_data import DcconData
 from .common import get_channel
 
@@ -47,35 +49,108 @@ def get_data_from_url(url):
     except requests.HTTPError:
         abort(500, 'Cannot get data from url')
 
-    return r.content.decode("utf-8")
+    return r.content
 
 
-def convert_dccon_funzinnu(data):
+def convert_data_to_json(data, order_dict=False):
+    data_json = None
+    try:
+        if order_dict:
+            data_json = json.loads(data.decode('utf-8-sig'), object_pairs_hook=OrderedDict)
+        else:
+            data_json = json.loads(data.decode('utf-8-sig'))
+    except json.JSONDecodeError as e:
+        abort(500, 'Cannot decode json data from url: {e}'.format(e=e.msg))
+    return data_json
+
+
+def parse_open_dccon(data):
+    data_json = convert_data_to_json(data)
+
+    if not isinstance(data_json, dict):
+        abort(500, 'Invalid data format: root must be object')
+    if 'dccons' not in data_json:
+        abort(500, 'Invalid data format: cannot find "dccons"')
+    if not isinstance(data_json['dccons'], list):
+        abort(500, 'Invalid data format: "dccons" must be list')
+
+    dccon_data = DcconData()
+    for index, dccon in enumerate(data_json['dccons']):
+        if 'keywords' not in dccon:
+            abort(500, 'Invalid data format: cannot find "keywords" on {index}th dccon'.format(index=index))
+        if 'tags' not in dccon:
+            abort(500, 'Invalid data format: cannot find "tags" on {index}th dccon'.format(index=index))
+        if 'path' not in dccon:
+            abort(500, 'Invalid data format: cannot find "path" on {index}th dccon'.format(index=index))
+
+        keywords = dccon['keywords']
+        tags = dccon['tags']
+        path = dccon['path']
+
+        if not isinstance(keywords, list):
+            abort(500, 'Invalid data format: "keywords" on {index}th dccon must be list'.format(index=index))
+        if not isinstance(tags, list):
+            abort(500, 'Invalid data format: "tags" on {index}th dccon must be list'.format(index=index))
+        if not isinstance(path, str):
+            abort(500, 'Invalid data format: "path" on {index}th dccon must be string'.format(index=index))
+
+        for keyword in keywords:
+            if not isinstance(keyword, str):
+                abort(500,
+                      'Invalid data format: "keywords" on {index}th dccon must be list of string'.format(index=index))
+
+        for tag in tags:
+            if not isinstance(tag, str):
+                abort(500, 'Invalid data format: "tags" on {index}th dccon must be list of string'.format(index=index))
+
+        dccon_data.add_dccon(keywords, path, tags)
+
+    return dccon_data.json_data
+
+
+def parse_open_dccon_rel_path(data, url):
+    json_data = parse_open_dccon(data)
+    for dccon in json_data['dccons']:
+        dccon['path'] = urljoin(url, dccon['path'])
+
+    return json_data
+
+
+def parse_funzinnu(data):
     # note: funzinnu's dccon data is a json object. It is written as pair of keyword without prefix and url.
     # note2: Converted dccon data should keep original order of keywords
     # example: {'test': 'http://url', 'hello': 'http://world'}
 
-    data_json = None
-    try:
-        data_json = json.loads(data, object_pairs_hook=OrderedDict) # keeping order of keywords
-    except json.JSONDecodeError:
-        abort(500, 'Cannot decode json data from url')
+    data_json = convert_data_to_json(data, order_dict=True)
+
+    if not isinstance(data_json, OrderedDict):
+        abort(500, 'Invalid data format: root must be object')
 
     dccon_data = DcconData()
-    for keyword, url in data_json.items():
+    for index, pair in enumerate(data_json.items()):
+        keyword, url = pair
+        if not isinstance(url, str):
+            abort(500, 'Invalid data format: {index}th dccon\'s value must be string'.format(index=index))
         dccon_data.add_dccon([keyword], url)
 
     return dccon_data.json_data
 
 
+def parse_telk(data):
+    # note: telk's dccon data is almost same with open dccon format but dccon url path is relative to specific url.
+
+    base_url = 'http://tv.telk.kr/images/'
+
+    json_data = parse_open_dccon(data)
+    for dccon in json_data['dccons']:
+        dccon['path'] = base_url + dccon['path']
+
+    return json_data
+
+
 # noinspection PyMethodMayBeStatic
 @api.resource('/api/convert-dccon-url')
 class ApiConvertDcconUrl(Resource):
-    TYPE_FUNZINNU = 'funzinnu'
-    TYPES = (
-        TYPE_FUNZINNU,
-    )
-
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('type', type=str, required=True)
@@ -85,13 +160,18 @@ class ApiConvertDcconUrl(Resource):
         _type = args['type']
         url = args['url']
 
-        if _type not in ApiConvertDcconUrl.TYPES:
+        if _type not in Channel.DCCON_TYPES:
             abort(400, 'Invalid type')
 
         data = get_data_from_url(url)
-        converted = None
 
-        if _type == ApiConvertDcconUrl.TYPE_FUNZINNU:
-            converted = convert_dccon_funzinnu(data)
+        if _type == Channel.DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH:
+            converted = parse_open_dccon_rel_path(data, url)
+        elif _type == Channel.DCCON_TYPE_FUNZINNU:
+            converted = parse_funzinnu(data)
+        elif _type == Channel.DCCON_TYPE_TELK:
+            converted = parse_telk(data)
+        else:  # Channel.DCCON_TYPE_OPEN_DCCON
+            converted = parse_open_dccon(data)
 
         return converted, 200

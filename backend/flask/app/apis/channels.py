@@ -50,12 +50,17 @@ class ApiChannel(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('token', type=str, required=True)
         parser.add_argument('dccon_url', type=str, required=False)
+        parser.add_argument('dccon_type', type=str, required=False)
         parser.add_argument('is_using_cache', type=int, required=False)
         args = parser.parse_args()
 
         token = args['token']
         dccon_url = args['dccon_url'] if 'dccon_url' in args else None
+        dccon_type = args['dccon_type'] if 'dccon_type' in args else None
         is_using_cache = parse_bool(args['is_using_cache']) if 'is_using_cache' in args else None
+
+        if dccon_type not in Channel.DCCON_TYPES:
+            abort(400, '{dccon_type} is invalid dccon_type'.format(dccon_type=dccon_type))
 
         decoded_token = decode_twitch_token(token)
         broadcaster_user_id = verify_broadcaster(decoded_token)
@@ -69,6 +74,9 @@ class ApiChannel(Resource):
         if dccon_url is not None:
             channel.dccon_url = dccon_url
             twitch_rc_dccon(dccon_url)
+
+        if dccon_type is not None:
+            channel.dccon_type = dccon_type
 
         if is_using_cache is not None:
             channel.is_using_cache = is_using_cache
