@@ -27,11 +27,11 @@ Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 �
 스트리머마다 사용 가능한 디시콘의 종류가 다르므로, 각 스트리머는 자신의 방송에서 사용 가능한 디시콘의 목록을 별도의 웹 사이트로 구성하여 시청자에게 제공하고 있습니다.
 
 예시:
-- Funzinnu (https://www.twitch.tv/funzinnu)
+- [Funzinnu](https://www.twitch.tv/funzinnu)
   - http://funzinnu.com/dccon.html
-- Yeokka (https://www.twitch.tv/yeokka)
+- [Yeokka](https://www.twitch.tv/yeokka)
   - https://krynen.github.io/jsassist-custom-css/list.html
-- 텔크 (https://www.twitch.tv/telk5093)
+- [텔크](https://www.twitch.tv/telk5093)
   - http://tv.telk.kr/list
 
 그러나 방송 시청 중 별도의 웹 사이트에 접속하여 디시콘을 찾고, 이를 다시 방송 채팅 화면에 붙여넣어 사용하는 것은 번거로운 일입니다.
@@ -50,6 +50,8 @@ https://www.twitch.tv/ext/q9hjbqg3j6ukrq81pqyb9j5kwomzl8-0.0.1
 확장 프로그램 구성에서 Dccon Url 입력란에 사용중인 디시콘 채팅 데이터 주소를 입력하고 'Submit' 버튼을 클릭합니다. (예시 - https://rishubil.github.io/jsassist-open-dccon/static/dccon_list.json)
 
 이제 방송 중에 Open Dccon Selector를 사용할 수 있습니다.
+
+더 자세한 설정은 [상세 설정](/USAGE.md)을 참고하세요.
 
 ## License
 
