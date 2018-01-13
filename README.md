@@ -52,7 +52,7 @@ Click on the 'Install' button in the upper right corner and click 'Configure' bu
 In the extension configuration, enter the URL of your Dccon chat data in the Dccon URL field and click the 'Submit' button.
 (Example - https://rishubil.github.io/jsassist-open-dccon/static/dccon_list.json)
 
-Now you can use the Open Dccon Selector during the broadcast.
+Now You can go to the "Extensions" section of the Twitch dashboard and activate the Open Dccon Selector.
 
 For more detailed settings, see [configuration document](/CONFIG.md).
 

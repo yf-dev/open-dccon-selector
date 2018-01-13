@@ -52,7 +52,7 @@ Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 �
 확장 프로그램 구성에서 Dccon Url 입력란에 사용중인 디시콘 채팅 데이터 주소를 입력하고 'Submit' 버튼을 클릭합니다.
 (예시 - https://rishubil.github.io/jsassist-open-dccon/static/dccon_list.json)
 
-이제 방송 중에 Open Dccon Selector를 사용할 수 있습니다.
+이제 트위치 대시보드의 '확장' 항목으로 이동하여 에서 Open Dccon Selector를 '활성화' 하여 바로 사용할 수 있습니다.
 
 더 자세한 설정은 [상세 설정](/CONFIG.md)을 참고하세요.
 
