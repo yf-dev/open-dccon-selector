@@ -1,5 +1,7 @@
 # Configuration
 
+[한국어](/CONFIG.ko.md)
+
 You can access the Open Dccon Selector configuration by clicking the gear icon on the bottom right corner of the Open
 Dccon Selector element in the "Extensions" section of the Twitch dashboard.
 

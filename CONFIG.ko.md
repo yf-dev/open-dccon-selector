@@ -1,5 +1,7 @@
 # 상세 설정
 
+[English](/CONFIG.md)
+
 Open Dccon Selector는 트위치 대시보드의 '확장' 항목에서 Open Dccon Selector의 우측 하단 톱니바퀴 아이콘을 클릭하여
 설정할 수 있습니다.
 
