@@ -4,9 +4,10 @@ import requests
 from datetime import datetime, timedelta
 from requests.exceptions import RequestException
 from flask import abort
+from urllib.parse import quote_plus
 
-from .. import db
-from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_VERSION
+from .. import db, api
+from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_VERSION, API_HOSTNAME
 from ..utils import twitch_channel_name_to_id
 from ..models import Channel
 
@@ -94,7 +95,13 @@ def update_twitch_rc(decoded_token, rc):
 
 
 def update_cached_dccon(channel):
-    r = requests.get(channel.dccon_url, timeout=5)
+    from .exports import ApiConvertDcconUrl
+    r = requests.get('https://{host}{base}?type={type}&url={url}'.format(
+        host=API_HOSTNAME,
+        base=api.url_for(ApiConvertDcconUrl),
+        type=channel.dccon_type,
+        url=quote_plus(channel.dccon_url)
+    ), timeout=5)
 
     dccon_json = None
     try:
