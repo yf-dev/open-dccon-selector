@@ -175,6 +175,7 @@
 
   .dccon-container {
     line-height: 0;
+    min-height: 32px * $height-factor + 4px * 2;
   }
 
   .preview {
