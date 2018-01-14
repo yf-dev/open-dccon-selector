@@ -96,12 +96,16 @@ def update_twitch_rc(decoded_token, rc):
 
 def update_cached_dccon(channel):
     from .exports import ApiConvertDcconUrl
-    r = requests.get('https://{host}{base}?type={type}&url={url}'.format(
+    url = 'https://{host}{base}?type={type}&url={url}'.format(
         host=API_HOSTNAME,
         base=api.url_for(ApiConvertDcconUrl),
         type=channel.dccon_type,
         url=quote_plus(channel.dccon_url)
-    ), timeout=5)
+    )
+    try:
+        r = requests.get(url, timeout=15)
+    except RequestException:
+        abort(500, 'Cannot get dccon data from' + str(url))
 
     dccon_json = None
     try:
