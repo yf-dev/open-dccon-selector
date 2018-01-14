@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from . import db
+from . import db, api
+from .consts import API_HOSTNAME
 
 
 class CommonModel(object):
@@ -72,4 +73,8 @@ class Channel(db.Model, CommonModel):
         return channel
 
     def cached_dccon_url(self):
-        return '/api/channel/{}/cached-dccon'.format(self.user_id)
+        from .apis.channels import ApiChannelCachedDccon
+        return 'https://{host}{url}'.format(
+            host=API_HOSTNAME,
+            url=api.url_for(ApiChannelCachedDccon, user_id=self.user_id)
+        )
