@@ -105,7 +105,7 @@ def update_cached_dccon(channel):
     try:
         r = requests.get(url, timeout=15)
     except RequestException:
-        abort(500, 'Cannot get dccon data from' + str(url))
+        abort(500, 'Cannot get dccon data from ' + str(url))
 
     dccon_json = None
     try:
