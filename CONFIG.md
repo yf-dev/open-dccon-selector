@@ -49,7 +49,7 @@ Example: [http://tv.telk.kr/?mode=json](http://tv.telk.kr/?mode=json)
 
 If this option is enabled, Dccon data is cached in the Open Dccon Selector server to use.
 
-(Exclude Dccon image files)
+(It does not cache Dccon image files.)
 
 You can not disable the option for all Dccon types except Open Dccon Format.
 
