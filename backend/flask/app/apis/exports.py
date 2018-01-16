@@ -1,15 +1,15 @@
-from collections import OrderedDict
-import requests
 import json
+from collections import OrderedDict
 from urllib.parse import urljoin
 
+import requests
 from flask import abort
 from flask_restful import Resource, reqparse
 
-from .. import api
-from ..models import Channel
-from ..dccon_data import DcconData
 from .common import get_channel
+from .. import api
+from ..dccon_data import DcconData
+from ..models import Channel
 
 
 # noinspection PyMethodMayBeStatic
@@ -97,11 +97,13 @@ def parse_open_dccon(data):
         for keyword in keywords:
             if not isinstance(keyword, str):
                 abort(500,
-                      'Invalid data format: "keywords" on {index}th dccon must be list of string'.format(index=index + 1))
+                      'Invalid data format: "keywords" on {index}th dccon must be list of string'.format(
+                          index=index + 1))
 
         for tag in tags:
             if not isinstance(tag, str):
-                abort(500, 'Invalid data format: "tags" on {index}th dccon must be list of string'.format(index=index + 1))
+                abort(500,
+                      'Invalid data format: "tags" on {index}th dccon must be list of string'.format(index=index + 1))
 
         dccon_data.add_dccon(keywords, path, tags)
 

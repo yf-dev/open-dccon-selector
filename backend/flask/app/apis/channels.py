@@ -4,11 +4,11 @@ from flask import abort
 from flask_restful import Resource, reqparse
 from sqlalchemy import exists
 
+from .common import verify_broadcaster, decode_twitch_token, update_twitch_rc, get_channel_by_user_id, \
+    update_cached_dccon, update_db, parse_bool
 from .. import api, db
 from ..consts import CACHED_DCCON_UPDATE_DELTA
 from ..models import Channel
-from .common import verify_broadcaster, decode_twitch_token, update_twitch_rc, get_channel_by_user_id, \
-    update_cached_dccon, update_db, parse_bool
 
 
 # noinspection PyMethodMayBeStatic
