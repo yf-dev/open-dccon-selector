@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -19,19 +19,3 @@ twitchClient = TwitchClient(client_id=TWITCH_EXTENSION_CLIENT_ID)
 
 from . import models
 from . import apis
-
-@app.route('/')
-def index():
-    return redirect(url_for('overlay'))
-
-@app.route('/config.html')
-def config():
-    return render_template('config.html')
-
-@app.route('/viewer.html')
-def overlay():
-    return render_template('viewer.html')
-
-@app.route('/live-config.html')
-def live_config():
-    return render_template('live-config.html')
