@@ -130,6 +130,11 @@ if (process.env.NODE_ENV === 'production') {
     }),
   ]);
 } else {
+  module.exports.watch = true;
+  module.exports.watchOptions = {
+    aggregateTimeout: 300,
+    poll: 1000,
+  };
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
