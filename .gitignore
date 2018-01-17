@@ -14,3 +14,4 @@ __pycache__/
 /frontend/yarn-error.log*
 /backend/penv/
 /backend/flask/app/templates/
+frontend/node_modules.tar

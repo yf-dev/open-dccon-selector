@@ -14,12 +14,10 @@ services:
       - "POSTGRES_USER=ods"
       - "LC_COLLATE=C"
 
-  flask:
+  backend:
     build: ./backend
     links:
       - db
-#    expose:
-#      - "8088"
     ports:
       - "8088:8088"
     command: python3 debug.py

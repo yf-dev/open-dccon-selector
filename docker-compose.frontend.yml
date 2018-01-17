@@ -1,0 +1,17 @@
+version: '2'
+services:
+  frontend:
+    build: ./frontend
+    env_file:
+      - settings.env
+    ports:
+      - "8089:8089"
+    command: "yarn dev"
+    volumes:
+      - ./frontend:/frontend
+      - ./backend/localhost-ssl.crt:/cert/localhost-ssl.crt:ro
+      - ./backend/localhost-ssl.key:/cert/localhost-ssl.key:ro
+      - node-modules:/frontend/node_modules
+
+volumes:
+  node-modules:

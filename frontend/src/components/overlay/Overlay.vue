@@ -27,8 +27,8 @@
   import axios from 'axios';
   import Clipboard from 'clipboard';
   import _ from 'lodash';
-  import Dccon from './Dccon';
-  import getParameterByName from '../../common';
+  import Dccon from './Dccon.vue';
+  import getParameterByName from '../../util';
 
   // noinspection JSUnusedGlobalSymbols
   export default {
@@ -70,9 +70,7 @@
     methods: {
       getDccons() {
         this.isDcconLoading = true;
-        axios.get(
-          `https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`,
-        )
+        axios.get(`https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`)
           .then((response) => {
             this.dcconUrl = response.data.dccon_url;
             this.getDcconsFromUrl();
@@ -84,9 +82,7 @@
       },
       getDcconsFromUrl() {
         this.isDcconLoading = true;
-        axios.get(
-          this.dcconUrl,
-        )
+        axios.get(this.dcconUrl)
           .then((response) => {
             this.dccons = response.data.dccons;
             this.isDcconLoading = false;

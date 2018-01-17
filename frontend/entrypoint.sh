@@ -8,5 +8,5 @@ then
   exec $@
 else
   yarn install
-  exec yarn start
+  exec yarn build
 fi

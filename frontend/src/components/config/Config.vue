@@ -49,7 +49,7 @@
 
 <script>
   import axios from 'axios';
-  import getParameterByName from '../../common';
+  import getParameterByName from '../../util';
 
   // noinspection JSUnusedGlobalSymbols
   export default {
@@ -124,9 +124,7 @@
       getDcconUrl() {
         this.isUpdating = true;
         this.canSubmit = false;
-        axios.get(
-          `https://${process.env.API_HOSTNAME}/api/channel/${this.auth.channelId}?token=${this.auth.token}`,
-        )
+        axios.get(`https://${process.env.API_HOSTNAME}/api/channel/${this.auth.channelId}?token=${this.auth.token}`)
           .then((response) => {
             if (response.status === 200) {
               this.channelData = response.data;
@@ -206,9 +204,7 @@
         this.isUpdating = true;
         this.canTest = false;
         this.testResult = '';
-        axios.get(
-          `https://${process.env.API_HOSTNAME}/api/convert-dccon-url?type=${this.channelData.dccon_type}&url=${encodeURIComponent(this.channelData.dccon_url)}`,
-        )
+        axios.get(`https://${process.env.API_HOSTNAME}/api/convert-dccon-url?type=${this.channelData.dccon_type}&url=${encodeURIComponent(this.channelData.dccon_url)}`)
           .then(() => {
             this.testResult = 'OK';
             this.isUpdating = false;
