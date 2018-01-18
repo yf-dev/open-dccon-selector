@@ -95,7 +95,7 @@ def update_twitch_rc(decoded_token, rc):
 
 def update_cached_dccon(channel):
     from .exports import convert_dccon
-    dccon_json = convert_dccon(channel.dccon_type, channel.dccon_url)
+    dccon_json, result_code = convert_dccon(channel.dccon_type, channel.dccon_url)
 
     channel.cached_dccon = dccon_json
     channel.last_cache_update = datetime.utcnow()
