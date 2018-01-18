@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     env_file:
       - settings.env
+      - settings.dev.env
     environment:
       - "POSTGRES_DB=open-dccon-selector"
       - "POSTGRES_USER=ods"
@@ -24,6 +25,7 @@ services:
     tty: true
     env_file:
       - settings.env
+      - settings.dev.env
     volumes:
       - ./backend/flask:/var/www/flask
       - ./backend/localhost-ssl.crt:/etc/ssl/private/localhost-ssl.crt:ro
