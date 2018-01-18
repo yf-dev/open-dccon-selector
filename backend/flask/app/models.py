@@ -46,12 +46,14 @@ class Channel(db.Model, CommonModel):
 
     DCCON_TYPE_OPEN_DCCON = 'open_dccon'
     DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH = 'open_dccon_rel_path'
+    DCCON_TYPE_BRIDGE_BBCC = 'bridge_bbcc'
     DCCON_TYPE_FUNZINNU = 'funzinnu'
     DCCON_TYPE_TELK = 'telk'
 
     DCCON_TYPES = (
         DCCON_TYPE_OPEN_DCCON,
         DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH,
+        DCCON_TYPE_BRIDGE_BBCC,
         DCCON_TYPE_FUNZINNU,
         DCCON_TYPE_TELK
     )

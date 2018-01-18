@@ -1,4 +1,5 @@
 import json
+import re
 from collections import OrderedDict
 from urllib.parse import urljoin
 
@@ -118,6 +119,66 @@ def parse_open_dccon_rel_path(data, url):
     return json_data
 
 
+def parse_bridge_bbcc(data, url):
+    REGEX_DATA = r'dcConsData\s*=\s*(\[(\s*{\s*[\s\S]*?}\s*)*\])'
+    REGEX_NAME = r'(name)(\s*:\s*")'
+    REGEX_KEYWORDS = r'(keywords)(\s*:\s*\[)'
+    REGEX_TAGS = r'(tags)(\s*:\s*\[)'
+
+    match = re.search(REGEX_DATA, data.decode('utf-8-sig'))
+    if not match:
+        abort(500, 'Invalid data format: Not matched data to "{regex}"'.format(regex=REGEX_DATA))
+
+    dccons_jo = match.group(1)
+    dccons_jo = re.sub(REGEX_NAME, r'"\1"\2', dccons_jo)
+    dccons_jo = re.sub(REGEX_KEYWORDS, r'"\1"\2', dccons_jo)
+    dccons_jo = re.sub(REGEX_TAGS, r'"\1"\2', dccons_jo)
+
+    dccons = None
+
+    try:
+        dccons = json.loads(dccons_jo)
+    except json.JSONDecodeError as e:
+        abort(500, 'Cannot decode data: {e}'.format(e=str(e)))
+
+    dccon_data = DcconData()
+    for index, dccon in enumerate(dccons):
+        if 'keywords' not in dccon:
+            abort(500, 'Invalid data format: cannot find "keywords" on {index}th dccon'.format(index=index + 1))
+        if 'tags' not in dccon:
+            abort(500, 'Invalid data format: cannot find "tags" on {index}th dccon'.format(index=index + 1))
+        if 'name' not in dccon:
+            abort(500, 'Invalid data format: cannot find "name" on {index}th dccon'.format(index=index + 1))
+
+        keywords = dccon['keywords']
+        tags = dccon['tags']
+        name = dccon['name']
+
+        if not isinstance(keywords, list):
+            abort(500, 'Invalid data format: "keywords" on {index}th dccon must be list'.format(index=index + 1))
+        if not isinstance(tags, list):
+            abort(500, 'Invalid data format: "tags" on {index}th dccon must be list'.format(index=index + 1))
+        if not isinstance(name, str):
+            abort(500, 'Invalid data format: "name" on {index}th dccon must be string'.format(index=index + 1))
+
+        path = urljoin(url, '../images/dccon/{name}'.format(name=name))
+
+        for keyword in keywords:
+            if not isinstance(keyword, str):
+                abort(500,
+                      'Invalid data format: "keywords" on {index}th dccon must be list of string'.format(
+                          index=index + 1))
+
+        for tag in tags:
+            if not isinstance(tag, str):
+                abort(500,
+                      'Invalid data format: "tags" on {index}th dccon must be list of string'.format(index=index + 1))
+
+        dccon_data.add_dccon(keywords, path, tags)
+
+    return dccon_data.json_data
+
+
 def parse_funzinnu(data):
     # note: funzinnu's dccon data is a json object. It is written as pair of keyword without prefix and url.
     # note2: Converted dccon data should keep original order of keywords
@@ -158,6 +219,8 @@ def convert_dccon(_type, url):
 
     if _type == Channel.DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH:
         converted = parse_open_dccon_rel_path(data, url)
+    elif _type == Channel.DCCON_TYPE_BRIDGE_BBCC:
+        converted = parse_bridge_bbcc(data, url)
     elif _type == Channel.DCCON_TYPE_FUNZINNU:
         converted = parse_funzinnu(data)
     elif _type == Channel.DCCON_TYPE_TELK:
