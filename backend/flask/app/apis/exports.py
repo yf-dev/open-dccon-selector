@@ -150,6 +150,24 @@ def parse_telk(data):
     return json_data
 
 
+def convert_dccon(_type, url):
+    if _type not in Channel.DCCON_TYPES:
+        abort(400, 'Invalid type')
+
+    data = get_data_from_url(url)
+
+    if _type == Channel.DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH:
+        converted = parse_open_dccon_rel_path(data, url)
+    elif _type == Channel.DCCON_TYPE_FUNZINNU:
+        converted = parse_funzinnu(data)
+    elif _type == Channel.DCCON_TYPE_TELK:
+        converted = parse_telk(data)
+    else:  # Channel.DCCON_TYPE_OPEN_DCCON
+        converted = parse_open_dccon(data)
+
+    return converted, 200
+
+
 # noinspection PyMethodMayBeStatic
 @api.resource('/api/convert-dccon-url')
 class ApiConvertDcconUrl(Resource):
@@ -162,18 +180,4 @@ class ApiConvertDcconUrl(Resource):
         _type = args['type']
         url = args['url']
 
-        if _type not in Channel.DCCON_TYPES:
-            abort(400, 'Invalid type')
-
-        data = get_data_from_url(url)
-
-        if _type == Channel.DCCON_TYPE_OPEN_DCCON_RELATIVE_PATH:
-            converted = parse_open_dccon_rel_path(data, url)
-        elif _type == Channel.DCCON_TYPE_FUNZINNU:
-            converted = parse_funzinnu(data)
-        elif _type == Channel.DCCON_TYPE_TELK:
-            converted = parse_telk(data)
-        else:  # Channel.DCCON_TYPE_OPEN_DCCON
-            converted = parse_open_dccon(data)
-
-        return converted, 200
+        return convert_dccon(_type, url)

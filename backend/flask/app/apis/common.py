@@ -1,14 +1,12 @@
-import json
 from datetime import datetime, timedelta
-from urllib.parse import quote_plus
 
 import jwt
 import requests
 from flask import abort
 from requests.exceptions import RequestException
 
-from .. import db, api
-from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_VERSION, API_HOSTNAME
+from .. import db
+from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_VERSION
 from ..models import Channel
 from ..utils import twitch_channel_name_to_id
 
@@ -96,23 +94,8 @@ def update_twitch_rc(decoded_token, rc):
 
 
 def update_cached_dccon(channel):
-    from .exports import ApiConvertDcconUrl
-    url = 'https://{host}{base}?type={type}&url={url}'.format(
-        host=API_HOSTNAME,
-        base=api.url_for(ApiConvertDcconUrl),
-        type=channel.dccon_type,
-        url=quote_plus(channel.dccon_url)
-    )
-    try:
-        r = requests.get(url, timeout=15)
-    except RequestException:
-        abort(500, 'Cannot get dccon data from ' + str(url))
-
-    dccon_json = None
-    try:
-        dccon_json = json.loads(r.content.decode('utf-8-sig'))
-    except json.JSONDecodeError as e:
-        abort(400, 'Cannot decode json from ' + str(channel.dccon_url))
+    from .exports import convert_dccon
+    dccon_json = convert_dccon(channel.dccon_type, channel.dccon_url)
 
     channel.cached_dccon = dccon_json
     channel.last_cache_update = datetime.utcnow()
