@@ -17,7 +17,9 @@ to show the personality of each broadcast.
 
 ## How to apply Dccon chat to broadcast
 
-Currently, you can use JSAssist Open DCcon, Bridge BBCC, ChatAssistX-Client which are open source.
+Currently, you can use [JSAssist Open DCcon](https://github.com/rishubil/jsassist-open-dccon),
+[Bridge BBCC](https://github.com/krynen/BridgeBBCC),
+[ChatAssistX-Client](https://github.com/Lastorder-DC/ChatAssistX-Client) which are open source.
 
 For how to apply each program, refer to the program guide.
 
