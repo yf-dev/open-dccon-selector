@@ -70,6 +70,10 @@
             name: 'Open Dccon Format (Relative path)',
           },
           {
+            key: 'bridge_bbcc',
+            name: 'Bridge BBCC Format',
+          },
+          {
             key: 'funzinnu',
             name: 'Funzinnu Dccon Format',
           },
