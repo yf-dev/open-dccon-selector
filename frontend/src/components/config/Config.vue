@@ -74,6 +74,10 @@
             name: 'Bridge BBCC Format',
           },
           {
+            key: 'bridge_bbcc_bc',
+            name: 'Bridge BBCC Format with custom dcConsURI',
+          },
+          {
             key: 'funzinnu',
             name: 'Funzinnu Dccon Format',
           },
