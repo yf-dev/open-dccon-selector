@@ -119,7 +119,7 @@ def parse_open_dccon_rel_path(data, url):
     return json_data
 
 
-def parse_bridge_bbcc(data, url):
+def parse_bridge_bbcc_general(data, url, relpath):
     REGEX_DATA = r'dcConsData\s*=\s*(\[(\s*{\s*[\s\S]*?}\s*)*\])'
     REGEX_NAME = r'(name)(\s*:\s*")'
     REGEX_KEYWORDS = r'(keywords)(\s*:\s*\[)'
@@ -161,7 +161,7 @@ def parse_bridge_bbcc(data, url):
         if not isinstance(name, str):
             abort(500, 'Invalid data format: "name" on {index}th dccon must be string'.format(index=index + 1))
 
-        path = urljoin(url, '../images/dccon/{name}'.format(name=name))
+        path = urljoin(url, relpath.format(name=name))
 
         for keyword in keywords:
             if not isinstance(keyword, str):
@@ -177,6 +177,14 @@ def parse_bridge_bbcc(data, url):
         dccon_data.add_dccon(keywords, path, tags)
 
     return dccon_data.json_data
+
+
+def parse_bridge_bbcc(data, url):
+    return parse_bridge_bbcc_general(data, url, '../images/dccon/{name}')
+
+
+def parse_bridge_bbcc_custom_url(data, url):
+    return parse_bridge_bbcc_general(data, url, './images/{name}')
 
 
 def parse_funzinnu(data):
@@ -221,6 +229,8 @@ def convert_dccon(_type, url):
         converted = parse_open_dccon_rel_path(data, url)
     elif _type == Channel.DCCON_TYPE_BRIDGE_BBCC:
         converted = parse_bridge_bbcc(data, url)
+    elif _type == Channel.DCCON_TYPE_BRIDGE_BBCC_CUSTOM_URL:
+        converted = parse_bridge_bbcc_custom_url(data, url)
     elif _type == Channel.DCCON_TYPE_FUNZINNU:
         converted = parse_funzinnu(data)
     elif _type == Channel.DCCON_TYPE_TELK:
