@@ -120,7 +120,7 @@ def parse_open_dccon_rel_path(data, url):
 
 
 def parse_bridge_bbcc_general(data, url, relpath):
-    REGEX_DATA = r'dcConsData\s*=\s*(\[(\s*{\s*[\s\S]*?}\s*)*\s*,?\s*\])'
+    REGEX_DATA = r'dcConsData\s*=\s*\[(\s*({\s*[\s\S]*?}\s*)*)\s*,?\s*\]'
     REGEX_NAME = r'(name)(\s*:\s*")'
     REGEX_KEYWORDS = r'(keywords)(\s*:\s*\[)'
     REGEX_TAGS = r'(tags)(\s*:\s*\[)'
@@ -129,7 +129,7 @@ def parse_bridge_bbcc_general(data, url, relpath):
     if not match:
         abort(500, 'Invalid data format: Not matched data to "{regex}"'.format(regex=REGEX_DATA))
 
-    dccons_jo = match.group(1)
+    dccons_jo = '[{elements}]'.format(elements=match.group(1))
     dccons_jo = re.sub(REGEX_NAME, r'"\1"\2', dccons_jo)
     dccons_jo = re.sub(REGEX_KEYWORDS, r'"\1"\2', dccons_jo)
     dccons_jo = re.sub(REGEX_TAGS, r'"\1"\2', dccons_jo)
