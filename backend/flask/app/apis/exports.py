@@ -120,7 +120,7 @@ def parse_open_dccon_rel_path(data, url):
 
 
 def parse_bridge_bbcc_general(data, url, relpath):
-    REGEX_DATA = r'dcConsData\s*=\s*(\[(\s*{\s*[\s\S]*?},?\s*)*\])'
+    REGEX_DATA = r'dcConsData\s*=\s*(\[(\s*{\s*[\s\S]*?}\s*)*\s*,?\s*\])'
     REGEX_NAME = r'(name)(\s*:\s*")'
     REGEX_KEYWORDS = r'(keywords)(\s*:\s*\[)'
     REGEX_TAGS = r'(tags)(\s*:\s*\[)'
