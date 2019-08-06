@@ -4,6 +4,7 @@ __pycache__/
 *.py[cod]
 
 /.idea/
+/.vscode/
 
 /settings.env
 /docker-compose.nesswit-server.yml
@@ -12,6 +13,7 @@ __pycache__/
 /frontend/npm-debug.log*
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
+/frontend/node_modules.tar
 /backend/penv/
 /backend/flask/app/templates/
-frontend/node_modules.tar
+/log/
