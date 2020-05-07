@@ -6,12 +6,12 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 module.exports = {
   entry: {
-    viewer: './src/viewer.js',
+    video_overlay: './src/viewer.js',
     config: './src/config.js',
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/',
+    publicPath: '',
     filename: 'static/[name].[hash].js',
   },
   module: {
@@ -83,8 +83,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'viewer.html',
-      chunks: ['viewer'],
+      filename: 'video_overlay.html',
+      chunks: ['video_overlay'],
       template: 'src/html/base.html',
     }),
     new HtmlWebpackPlugin({
@@ -139,7 +139,8 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
-        API_HOSTNAME: '"localhost:8088"',
+        API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
+        // API_HOSTNAME: '"localhost:8088"',
       },
     }),
   ]);
