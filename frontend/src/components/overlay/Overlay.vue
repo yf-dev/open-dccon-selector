@@ -1,7 +1,7 @@
 <template>
   <div id="viewer" class="app">
     <div class="container" @mouseleave="containerMouseLeave" @mousemove="containerMouseMove">
-      <div :class="{'invisible': !isHovered, 'visible': isHovered}">
+      <div :class="{'invisible': !isHovered || dccons.length === 0, 'visible': isHovered && dccons.length !== 0}">
         <button class="btn" @click.prevent="toggle">
           <i class="icon" :class="{'icon-cross': isOpened, 'icon-menu': !isOpened}"></i>
         </button>
@@ -42,7 +42,6 @@
         isHovered: false,
         isNotified: false,
         isOpened: false,
-        dcconUrl: '',
         notice: '',
         dccons: [],
         hoveredDccon: null,
@@ -54,12 +53,12 @@
       if (window.Twitch.ext) {
         this.auth.channelId = getParameterByName('id');
         if (this.auth.channelId !== null) {
-          this.getDccons();
+          this.getDcconsFromUrl();
         }
         window.Twitch.ext.onAuthorized((auth) => {
           this.auth = auth;
-          if (!this.isDcconLoading && this.dcconUrl === '' && this.dccons.length === 0) {
-            this.getDccons();
+          if (!this.isDcconLoading && this.dccons.length === 0) {
+            this.getDcconsFromUrl();
           }
         });
       }
@@ -68,26 +67,15 @@
       const clipboard = new Clipboard('.clipboard');
     },
     methods: {
-      getDccons() {
-        this.isDcconLoading = true;
-        axios.get(`https://${process.env.API_HOSTNAME}/api/dccon-url?user_id=${this.auth.channelId}`)
-          .then((response) => {
-            this.dcconUrl = response.data.dccon_url;
-            this.getDcconsFromUrl();
-          })
-          .catch(() => {
-            this.dcconUrl = '';
-            this.isDcconLoading = false;
-          });
-      },
       getDcconsFromUrl() {
         this.isDcconLoading = true;
-        axios.get(this.dcconUrl)
+        axios.get(`https://${process.env.API_HOSTNAME}/api/channel/${this.auth.channelId}/proxy-dccon`)
           .then((response) => {
             this.dccons = response.data.dccons;
             this.isDcconLoading = false;
           })
           .catch(() => {
+            this.dccons = []
             this.isDcconLoading = false;
           });
       },

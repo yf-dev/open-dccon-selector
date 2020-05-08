@@ -139,8 +139,8 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
-        API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
-        // API_HOSTNAME: '"localhost:8088"',
+        // API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
+        API_HOSTNAME: '"localhost:8088"',
       },
     }),
   ]);

@@ -5,7 +5,7 @@ from flask_restful import Resource, reqparse
 from sqlalchemy import exists
 
 from .common import verify_broadcaster, decode_twitch_token, update_twitch_rc, get_channel_by_user_id, \
-    update_cached_dccon, update_db, parse_bool
+    update_cached_dccon, update_db, parse_bool, proxyimg_dccon_json
 from .. import api, db
 from ..consts import CACHED_DCCON_UPDATE_DELTA
 from ..models import Channel
@@ -141,3 +141,28 @@ class ApiChannelCachedDcconUpdate(Resource):
         update_cached_dccon(channel)
 
         return channel.json(), 200
+
+
+# note: If you edit url of proxy dccon, you should change Channel.proxy_dccon_url method too.
+# noinspection PyMethodMayBeStatic
+@api.resource('/api/channel/<string:user_id>/proxy-dccon')
+class ApiChannelProxyDccon(Resource):
+    def get(self, user_id):
+        channel = get_channel_by_user_id(user_id)
+
+        dccon = None
+
+        if channel.is_using_cache:
+            if not channel.last_cache_update:
+                update_cached_dccon(channel)
+            else:
+                utc_now = datetime.utcnow()
+                checkpoint = channel.last_cache_update + CACHED_DCCON_UPDATE_DELTA
+                if checkpoint < utc_now:
+                    update_cached_dccon(channel)
+            dccon = channel.cached_dccon
+        else:
+            from .exports import convert_dccon
+            dccon, result_code = convert_dccon(channel.dccon_type, channel.dccon_url)
+
+        return proxyimg_dccon_json(dccon), 200

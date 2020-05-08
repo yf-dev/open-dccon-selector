@@ -1,3 +1,5 @@
+from .imgproxy import generate_url
+
 class DcconData:
     def __init__(self):
         self._data = {
@@ -16,6 +18,11 @@ class DcconData:
             if keyword in dccon['keywords']:
                 return dccon
         return None
+
+    def apply_proxyimg(self):
+        for index, dccon in enumerate(self._data['dccons']):
+            if dccon['path'].startswith('http://'):
+                self._data['dccons'][index]['path'] = generate_url(dccon['path'])
 
     @classmethod
     def from_json_data(cls, data):

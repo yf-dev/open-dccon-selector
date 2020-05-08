@@ -9,6 +9,7 @@ from .. import db
 from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_VERSION
 from ..models import Channel
 from ..utils import twitch_channel_name_to_id
+from ..dccon_data import DcconData
 
 
 def parse_bool(val):
@@ -113,3 +114,8 @@ def update_db(cb_rollback=None):
         if cb_rollback:
             cb_rollback()
         abort(500, 'Cannot update database')
+
+def proxyimg_dccon_json(dccon_json):
+    dccon = DcconData.from_json_data(dccon_json)
+    dccon.apply_proxyimg()
+    return dccon.json_data

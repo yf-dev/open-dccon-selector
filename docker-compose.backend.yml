@@ -35,5 +35,17 @@ services:
       - ./log/nginx:/var/log/nginx
     restart: unless-stopped
 
+  imgproxy:
+    image: darthsim/imgproxy:v2.13.1
+    ports:
+      - "8090:8080"
+    restart: unless-stopped
+    env_file:
+      - settings.env
+      - settings.dev.env
+    environment:
+      - "IMGPROXY_MAX_ANIMATION_FRAMES=1"
+      - "IMGPROXY_ALLOWED_SOURCES=http://,https://"
+
 volumes:
   db-data:

@@ -19,7 +19,7 @@
           <div class="form-group button-group">
             <label class="form-switch">
               Cache Dccon data to server
-              <input :disabled="selectedDcconType !== 'open_dccon'" type="checkbox" v-model="checkboxCache">
+              <input :disabled="shouldUseCache" type="checkbox" v-model="checkboxCache">
               <i class="form-icon"></i>
             </label>
           </div>
@@ -94,12 +94,14 @@
         canSubmit: false,
         canTest: true,
         canUpdateCache: true,
+        shouldUseCache: true,
       };
     },
     watch: {
       selectedDcconType(newValue) {
         this.channelData.dccon_type = newValue;
-        if (newValue !== 'open_dccon') {
+        this.updateShouldUseCacheInput();
+        if (this.shouldUseCache) {
           this.checkboxCache = true;
         }
       },
@@ -108,7 +110,8 @@
       },
       channelData(newValue) {
         this.selectedDcconType = newValue.dccon_type;
-        if (newValue.dccon_type !== 'open_dccon') {
+        this.updateShouldUseCacheInput();
+        if (this.shouldUseCache) {
           this.checkboxCache = true;
         } else {
           this.checkboxCache = newValue.is_using_cache;
@@ -250,6 +253,10 @@
       },
       inputDcconUrl(e) {
         this.channelData.dccon_url = e.target.value;
+        this.updateShouldUseCacheInput();
+        if (this.shouldUseCache) {
+          this.checkboxCache = true;
+        }
       },
       submit() {
         if (this.canSubmit) {
@@ -265,6 +272,9 @@
         if (this.canUpdateCache) {
           this.requestUpdateCacheDcconData();
         }
+      },
+      updateShouldUseCacheInput() {
+        return this.shouldUseCache = this.selectedDcconType !== 'open_dccon' || this.channelData.dccon_url.startsWith('http://')
       },
     },
   };

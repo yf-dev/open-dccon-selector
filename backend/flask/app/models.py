@@ -74,6 +74,7 @@ class Channel(db.Model, CommonModel):
         channel.pop('cached_dccon')
         if self.is_using_cache:
             channel['cached_dccon_url'] = self.cached_dccon_url()
+        channel['proxy_dccon_url'] = self.proxy_dccon_url()
         return channel
 
     def cached_dccon_url(self):
@@ -81,4 +82,11 @@ class Channel(db.Model, CommonModel):
         return 'https://{host}{url}'.format(
             host=API_HOSTNAME,
             url=api.url_for(ApiChannelCachedDccon, user_id=self.user_id)
+        )
+
+    def proxy_dccon_url(self):
+        from .apis.channels import ApiChannelProxyDccon
+        return 'https://{host}{url}'.format(
+            host=API_HOSTNAME,
+            url=api.url_for(ApiChannelProxyDccon, user_id=self.user_id)
         )
