@@ -50,7 +50,7 @@ Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 �
 
 먼저, 아래의 주소에 접속합니다.
 
-[https://www.twitch.tv/ext/q9hjbqg3j6ukrq81pqyb9j5kwomzl8-0.0.1](https://www.twitch.tv/ext/q9hjbqg3j6ukrq81pqyb9j5kwomzl8-0.0.1)
+[https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1](https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1)
 
 우측 상단의 '설치' 버튼을 클릭하고, 디시콘 채팅 데이터를 설정하기 위해 '구성' 버튼을 클릭하여 확장 프로그램
 구성으로 진입합니다.
