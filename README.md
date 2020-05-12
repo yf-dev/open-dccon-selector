@@ -49,7 +49,7 @@ So I created an Open Dccon Selector to use Dccon chat quickly without leaving th
 
 First, go to the URL below.
 
-[https://www.twitch.tv/ext/q9hjbqg3j6ukrq81pqyb9j5kwomzl8-0.0.1](https://www.twitch.tv/ext/q9hjbqg3j6ukrq81pqyb9j5kwomzl8-0.0.1)
+[https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1](https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1)
 
 Click on the 'Install' button in the upper right corner and click 'Configure' button to set Dccon chat data.
 
