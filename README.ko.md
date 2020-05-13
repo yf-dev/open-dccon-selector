@@ -5,6 +5,12 @@
 Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 오버레이 확장 프로그램입니다.
 사용 가능한 디시콘을 오버레이를 통해 빠르게 찾아 사용할 수 있습니다.
 
+## 동영상 가이드
+
+아래 이미지를 클릭하시면 동영상 가이드를 시청하실 수 있습니다.
+
+[![Open Dccon Selector 소개 및 설정방법](https://img.youtube.com/vi/JQbwyMTIUwg/0.jpg)](https://www.youtube.com/watch?v=JQbwyMTIUwg "Open Dccon Selector 소개 및 설정방법")
+
 ## 디시콘 채팅이란?
 
 디시콘 채팅은 카카오톡의 이모티콘이나 텔레그렘의 스티커와 같이 채팅 메시지와 함께 작은 이미지를 채팅 화면에 표시하는
@@ -50,7 +56,7 @@ Open Dccon Selector는 디시콘 채팅을 지원하는 스트리머를 위한 �
 
 먼저, 아래의 주소에 접속합니다.
 
-[https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1](https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1)
+[https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo](https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo)
 
 우측 상단의 '설치' 버튼을 클릭하고, 디시콘 채팅 데이터를 설정하기 위해 '구성' 버튼을 클릭하여 확장 프로그램
 구성으로 진입합니다.

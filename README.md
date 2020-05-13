@@ -5,6 +5,12 @@
 Open Dccon Selector is a Twitch overlay extension for Streamers that support Dccon chat.
 By using Open Dccon Selector, viewers can find and use Dccons through overlay.
 
+## Video Tutorial
+
+You can watch the video tutorial by clicking thumbnail below.
+
+[![Introduction and setup guide of Open Dccon Selector](https://img.youtube.com/vi/JQbwyMTIUwg/0.jpg)](https://www.youtube.com/watch?v=JQbwyMTIUwg "Introduction and setup guide of Open Dccon Selector")
+
 ## What is Dccon chat?
 
 Dccon chat is a feature that displays a small image on a video chat screen with a chat message, such as a KakaoTalk
@@ -49,7 +55,7 @@ So I created an Open Dccon Selector to use Dccon chat quickly without leaving th
 
 First, go to the URL below.
 
-[https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1](https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo-0.0.1)
+[https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo](https://dashboard.twitch.tv/extensions/iotylqfktkxdjwyk1gdq2rlc7kw7zo)
 
 Click on the 'Install' button in the upper right corner and click 'Configure' button to set Dccon chat data.
 
