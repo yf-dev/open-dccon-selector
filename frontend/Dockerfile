@@ -1,6 +1,6 @@
-FROM node:boron
+FROM node:6-alpine
 
-RUN npm install -g yarn
+RUN apk --no-cache add --virtual .builds-deps build-base python2
 
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
