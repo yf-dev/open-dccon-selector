@@ -1,4 +1,4 @@
-FROM python:3.6.2-jessie
+FROM python:3.6-buster
 
 RUN sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
 RUN apt-get update && apt-get -y install \

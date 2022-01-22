@@ -12,3 +12,5 @@ fi
 
 docker-compose -f docker-compose.frontend.yml run --rm frontend yarn build
 
+cd ./frontend/dist
+zip -r ../dist-$(date '+%Y-%m-%d_%H-%M-%S').zip .

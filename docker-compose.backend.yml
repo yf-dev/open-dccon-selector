@@ -36,7 +36,7 @@ services:
     restart: unless-stopped
 
   imgproxy:
-    image: darthsim/imgproxy:v2.13.1
+    image: darthsim/imgproxy:v2.14.1
     ports:
       - "8090:8080"
     restart: unless-stopped

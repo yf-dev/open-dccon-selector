@@ -122,6 +122,7 @@ def parse_open_dccon_rel_path(data, url):
 def parse_bridge_bbcc_general(data, url, relpath):
     REGEX_DATA = r'dcConsData\s*=\s*\[(\s*({\s*[\s\S]*?}\s*)*)\s*,?\s*\]'
     REGEX_NAME = r'(name)(\s*:\s*")'
+    REGEX_URI = r'(uri)(\s*:\s*")'
     REGEX_KEYWORDS = r'(keywords)(\s*:\s*\[)'
     REGEX_TAGS = r'(tags)(\s*:\s*\[)'
 
@@ -131,6 +132,7 @@ def parse_bridge_bbcc_general(data, url, relpath):
 
     dccons_jo = '[{elements}]'.format(elements=match.group(1))
     dccons_jo = re.sub(REGEX_NAME, r'"\1"\2', dccons_jo)
+    dccons_jo = re.sub(REGEX_URI, r'"\1"\2', dccons_jo)
     dccons_jo = re.sub(REGEX_KEYWORDS, r'"\1"\2', dccons_jo)
     dccons_jo = re.sub(REGEX_TAGS, r'"\1"\2', dccons_jo)
 
@@ -161,7 +163,13 @@ def parse_bridge_bbcc_general(data, url, relpath):
         if not isinstance(name, str):
             abort(500, 'Invalid data format: "name" on {index}th dccon must be string'.format(index=index + 1))
 
-        path = urljoin(url, relpath.format(name=name))
+        if 'uri' in dccon:
+            uri = dccon['uri']
+            if not isinstance(uri, str):
+                abort(500, 'Invalid data format: "uri" on {index}th dccon must be string'.format(index=index + 1))
+            path = uri
+        else:
+            path = urljoin(url, relpath.format(name=name))
 
         for keyword in keywords:
             if not isinstance(keyword, str):
