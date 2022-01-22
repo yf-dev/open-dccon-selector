@@ -1,6 +1,6 @@
 <template>
   <div class="dccon">
-    <img class="image" :src="dccon.path" :alt="dccon.keywords[0]" @click.prevent="clicked" @mouseover="hovered">
+    <img class="image" :src="dccon.path" :alt="dccon.keywords[0]" @click.prevent="clicked" @mouseover="hovered" loading="lazy">
   </div>
 </template>
 
