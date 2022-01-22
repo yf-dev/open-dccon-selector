@@ -59,7 +59,10 @@ class ApiChannel(Resource):
         dccon_url = args['dccon_url'] if 'dccon_url' in args else None
         dccon_type = args['dccon_type'] if 'dccon_type' in args else None
         is_using_cache = parse_bool(args['is_using_cache']) if 'is_using_cache' in args else None
-        twitch_extension_version = args['twitch_extension_version'] if 'twitch_extension_version' in args else '0.0.1'
+        twitch_extension_version = args['twitch_extension_version'] if 'twitch_extension_version' in args else None
+
+        if twitch_extension_version is None:
+            twitch_extension_version = '0.0.1'
 
         if dccon_type not in Channel.DCCON_TYPES:
             abort(400, '{dccon_type} is invalid dccon_type'.format(dccon_type=dccon_type))
