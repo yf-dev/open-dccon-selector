@@ -21,8 +21,7 @@ class DcconData:
 
     def apply_proxyimg(self):
         for index, dccon in enumerate(self._data['dccons']):
-            if dccon['path'].startswith('http://'):
-                self._data['dccons'][index]['path'] = generate_url(dccon['path'])
+            self._data['dccons'][index]['path'] = generate_url(dccon['path'])
 
     @classmethod
     def from_json_data(cls, data):
