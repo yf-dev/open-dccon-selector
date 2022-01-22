@@ -43,21 +43,23 @@ class ApiChannel(Resource):
     def put(self, user_id):
         def twitch_rc_dccon(dccon_url):
             if dccon_url:
-                update_twitch_rc(decoded_token, ['dcconUrl'])
+                update_twitch_rc(decoded_token, twitch_extension_version, ['dcconUrl'])
             else:
-                update_twitch_rc(decoded_token, [])
+                update_twitch_rc(decoded_token, twitch_extension_version, [])
 
         parser = reqparse.RequestParser()
         parser.add_argument('token', type=str, required=True)
         parser.add_argument('dccon_url', type=str, required=False)
         parser.add_argument('dccon_type', type=str, required=False)
         parser.add_argument('is_using_cache', type=int, required=False)
+        parser.add_argument('twitch_extension_version', type=str, required=False) # TODO: change required options to true after v0.0.2 
         args = parser.parse_args()
 
         token = args['token']
         dccon_url = args['dccon_url'] if 'dccon_url' in args else None
         dccon_type = args['dccon_type'] if 'dccon_type' in args else None
         is_using_cache = parse_bool(args['is_using_cache']) if 'is_using_cache' in args else None
+        twitch_extension_version = args['twitch_extension_version'] if 'twitch_extension_version' in args else '0.0.1'
 
         if dccon_type not in Channel.DCCON_TYPES:
             abort(400, '{dccon_type} is invalid dccon_type'.format(dccon_type=dccon_type))

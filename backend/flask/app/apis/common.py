@@ -6,7 +6,7 @@ from flask import abort
 from requests.exceptions import RequestException
 
 from .. import db
-from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_VERSION, TWITCH_EXTENSION_OWNER_ID
+from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_OWNER_ID
 from ..models import Channel
 from ..utils import twitch_channel_name_to_id
 from ..dccon_data import DcconData
@@ -67,7 +67,7 @@ def verify_broadcaster(decoded_token):
     return decoded_token['user_id']
 
 
-def update_twitch_rc(decoded_token, rc):
+def update_twitch_rc(decoded_token, twitch_extension_version, rc):
     token_data = {
         'exp': datetime.utcnow() + timedelta(minutes=1),
         'user_id': TWITCH_EXTENSION_OWNER_ID,
@@ -76,7 +76,7 @@ def update_twitch_rc(decoded_token, rc):
     token = jwt.encode(token_data, TWITCH_EXTENSION_SECRET).decode("utf-8")
 
     url = 'https://api.twitch.tv/extensions/' + TWITCH_EXTENSION_CLIENT_ID + '/' + \
-          TWITCH_EXTENSION_VERSION + '/required_configuration?channel_id=' + decoded_token['channel_id']
+          twitch_extension_version + '/required_configuration?channel_id=' + decoded_token['channel_id']
 
     r = None
     try:

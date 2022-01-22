@@ -123,6 +123,7 @@ if (process.env.NODE_ENV === 'production') {
       'process.env': {
         NODE_ENV: '"production"',
         API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
+        TWITCH_EXTENSION_VERSION: `"${process.env.TWITCH_EXTENSION_VERSION}"`,
       },
     }),
     new webpack.LoaderOptionsPlugin({
@@ -141,6 +142,7 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"development"',
         // API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
         API_HOSTNAME: '"localhost:8088"',
+        TWITCH_EXTENSION_VERSION: `"${process.env.TWITCH_EXTENSION_VERSION}"`,
       },
     }),
   ]);

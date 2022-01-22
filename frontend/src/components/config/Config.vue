@@ -194,6 +194,7 @@
             dccon_url: this.channelData.dccon_url,
             dccon_type: this.channelData.dccon_type,
             is_using_cache: this.channelData.is_using_cache,
+            twitch_extension_version: process.env.TWITCH_EXTENSION_VERSION,
           },
         )
           .then((response) => {
