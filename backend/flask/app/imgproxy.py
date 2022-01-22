@@ -16,12 +16,11 @@ def generate_url(original_url):
     # You can trim padding spaces to get good-looking url
     encoded_url = '/'.join(textwrap.wrap(encoded_url, 16))
 
-    path = '/{resize}/{width}/{height}/{gravity}/{enlarge}/{encoded_url}'.format(
+    path = '/resize:{resizing_type}:{width}:{height}:{enlarge}/{encoded_url}'.format(
         encoded_url=encoded_url,
-        resize='fit',
+        resizing_type='fit',
         width=100,
         height=100,
-        gravity='ce',
         enlarge=0,
     ).encode()
     digest = hmac.new(key, msg=salt+path, digestmod=hashlib.sha256).digest()
