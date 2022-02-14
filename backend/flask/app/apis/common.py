@@ -75,13 +75,14 @@ def update_twitch_rc(decoded_token, twitch_extension_version, rc):
     }
     token = jwt.encode(token_data, TWITCH_EXTENSION_SECRET).decode("utf-8")
 
-    url = 'https://api.twitch.tv/extensions/' + TWITCH_EXTENSION_CLIENT_ID + '/' + \
-          twitch_extension_version + '/required_configuration?channel_id=' + decoded_token['channel_id']
+    url = 'https://api.twitch.tv/helix/extensions/required_configuration?broadcaster_id=' + decoded_token['channel_id']
 
     r = None
     try:
         r = requests.put(url, data={
-            'required_configuration': ','.join(rc) if rc else 'nope'
+            'required_configuration': ','.join(rc) if rc else 'nope',
+            'extension_id': TWITCH_EXTENSION_CLIENT_ID,
+            'extension_version': twitch_extension_version,
         }, headers={
             'Authorization': 'Bearer ' + token,
             'Client-Id': TWITCH_EXTENSION_CLIENT_ID
