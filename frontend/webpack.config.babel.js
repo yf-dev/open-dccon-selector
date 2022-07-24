@@ -3,6 +3,7 @@ import fs from 'fs';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { VueLoaderPlugin } from 'vue-loader';
 
 module.exports = {
   entry: {
@@ -12,7 +13,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '',
-    filename: 'static/[name].[hash].js',
+    filename: 'static/[name].[fullhash].js',
   },
   module: {
     rules: [
@@ -70,7 +71,7 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]',
+          name: '[name].[ext]?[fullhash]',
         },
       },
     ],
@@ -82,6 +83,7 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json'],
   },
   plugins: [
+    new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       filename: 'video_overlay.html',
       chunks: ['video_overlay'],
@@ -92,27 +94,28 @@ module.exports = {
       chunks: ['config'],
       template: 'src/html/base.html',
     }),
-    new CopyWebpackPlugin([
-      {
-        from: 'static',
-        to: 'static',
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "static", to: "static" },
+      ],
+    }),
   ],
   devServer: {
     historyApiFallback: true,
-    overlay: true,
+    server: {
+      type: 'https',
+      options: {
+        key: fs.readFileSync('/cert/localhost-ssl.key'),
+        cert: fs.readFileSync('/cert/localhost-ssl.crt'),
+      },
+    },
     host: '0.0.0.0',
     port: 8089,
-    https: {
-      key: fs.readFileSync('/cert/localhost-ssl.key'),
-      cert: fs.readFileSync('/cert/localhost-ssl.crt'),
-    },
   },
   performance: {
     hints: false,
   },
-  devtool: '#eval-source-map',
+  devtool: 'eval',
 };
 
 if (process.env.NODE_ENV === 'production') {
@@ -131,7 +134,6 @@ if (process.env.NODE_ENV === 'production') {
     }),
   ]);
 } else {
-  module.exports.watch = true;
   module.exports.watchOptions = {
     aggregateTimeout: 300,
     poll: 1000,
@@ -140,8 +142,8 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
-        // API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
-        API_HOSTNAME: '"localhost:8088"',
+        API_HOSTNAME: `"${process.env.API_HOSTNAME}"`,
+        // API_HOSTNAME: '"localhost:8088"',
         TWITCH_EXTENSION_VERSION: `"${process.env.TWITCH_EXTENSION_VERSION}"`,
       },
     }),

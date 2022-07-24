@@ -7,6 +7,6 @@ if [ ! -z $1 ]
 then
   exec $@
 else
-  yarn install
+  yarn
   exec yarn build
 fi

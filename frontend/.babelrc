@@ -1,11 +1,5 @@
 {
   "presets": [
-    "env",
-    "stage-3"
-  ],
-  "env": {
-    "production": {
-      "presets": [["env", {"modules": false}], "stage-3"]
-    }
-  }
+    "@babel/preset-env"
+  ]
 }
