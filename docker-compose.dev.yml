@@ -1,10 +1,12 @@
 services:
   db:
-    image: postgres:9.6
+    image: postgres:18
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      # postgres 18+ images keep PGDATA in a version subdirectory; the mount
+      # must be at /var/lib/postgresql (not .../data) per image docs
+      - db-data:/var/lib/postgresql
     restart: unless-stopped
     env_file:
       - settings.env
@@ -12,7 +14,7 @@ services:
     environment:
       - "POSTGRES_DB=open-dccon-selector"
       - "POSTGRES_USER=ods"
-      - "LC_COLLATE=C"
+      - "POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C"
 
   imgproxy:
     image: darthsim/imgproxy:v4.0.11
@@ -28,7 +30,7 @@ services:
 
   backend:
     build: ./backend
-    links:
+    depends_on:
       - db
     ports:
       - "8088:8088"
