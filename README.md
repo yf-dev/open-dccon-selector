@@ -2,6 +2,9 @@
 
 [한국어](/README.ko.md)
 
+> [!NOTE]
+> **Maintenance mode**: This project is in maintenance mode. No new features are planned; only minimal security patches will be applied.
+
 Open Dccon Selector is a Twitch overlay extension for Streamers that support Dccon chat.
 By using Open Dccon Selector, viewers can find and use Dccons through overlay.
 
