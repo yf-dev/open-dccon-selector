@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 import requests
 from flask import abort
-from flask_restful import Resource, reqparse
+from flask_restx import Resource, reqparse
 
 from .common import get_channel
 from .. import api
@@ -14,7 +14,7 @@ from ..models import Channel
 
 
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/dccon-url')
+@api.route('/api/dccon-url')
 class ApiDcconUrl(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -250,7 +250,7 @@ def convert_dccon(_type, url):
 
 
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/convert-dccon-url')
+@api.route('/api/convert-dccon-url')
 class ApiConvertDcconUrl(Resource):
     def get(self):
         parser = reqparse.RequestParser()

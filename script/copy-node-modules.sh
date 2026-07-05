@@ -15,7 +15,7 @@ then
 	rm -rf ./frontend/node_modules.tar
 fi
 echo "Create tar archive..."
-docker-compose -f docker-compose.frontend.yml run --rm frontend yarn tnm
+docker-compose -f docker-compose.dev.yml run --rm frontend yarn tnm
 echo "Extract tar archive..."
 tar xf ./frontend/node_modules.tar -C ./frontend
 echo "Remove tar archive..."

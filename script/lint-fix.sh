@@ -5,5 +5,5 @@ set -e
 cd "${0%/*}"
 cd ..
 
-docker-compose -f docker-compose.frontend.yml run --rm frontend yarn lint-fix
+docker-compose -f docker-compose.dev.yml run --rm frontend yarn lint-fix
 

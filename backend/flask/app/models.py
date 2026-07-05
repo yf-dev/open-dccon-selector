@@ -61,9 +61,9 @@ class Channel(db.Model, CommonModel):
     )
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Unicode(64, collation='c'), nullable=False, unique=True)
-    dccon_url = db.Column(db.Unicode(512, collation='c'), nullable=True)
-    dccon_type = db.Column(db.Unicode(32, collation='c'), nullable=False, default=DCCON_TYPE_OPEN_DCCON)
+    user_id = db.Column(db.Unicode(64, collation='C'), nullable=False, unique=True)
+    dccon_url = db.Column(db.Unicode(512, collation='C'), nullable=True)
+    dccon_type = db.Column(db.Unicode(32, collation='C'), nullable=False, default=DCCON_TYPE_OPEN_DCCON)
     last_cache_update = db.Column(db.DateTime(), nullable=True)
     is_using_cache = db.Column(db.Boolean(), nullable=False, default=False)
     cached_dccon = db.Column(db.JSON(), nullable=True)

@@ -5,4 +5,4 @@ set -e
 cd "${0%/*}"
 cd ..
 
-docker-compose -f docker-compose.backend.yml run --rm backend python3 manage.py db upgrade
+docker-compose -f docker-compose.dev.yml run --rm backend flask --app manage db upgrade

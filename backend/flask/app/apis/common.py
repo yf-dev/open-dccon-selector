@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import jwt
 import requests
@@ -8,16 +8,16 @@ from requests.exceptions import RequestException
 from .. import db
 from ..consts import TWITCH_EXTENSION_SECRET, TWITCH_EXTENSION_CLIENT_ID, TWITCH_EXTENSION_OWNER_ID
 from ..models import Channel
-from ..utils import twitch_channel_name_to_id
+from ..utils import twitch_channel_name_to_id, utcnow
 from ..dccon_data import DcconData
 
 
 def parse_bool(val):
     if val is None:
         return val
-    elif val is 1:
+    elif val == 1:
         return True
-    elif val is 0:
+    elif val == 0:
         return False
     else:
         abort(400, 'Boolean value must be one of 1 or 0.')
@@ -50,7 +50,7 @@ def get_channel_by_user_id(user_id):
 def decode_twitch_token(token):
     decoded_token = None
     try:
-        decoded_token = jwt.decode(token, TWITCH_EXTENSION_SECRET)
+        decoded_token = jwt.decode(token, TWITCH_EXTENSION_SECRET, algorithms=['HS256'])
     except jwt.InvalidTokenError as e:
         # raise e
         abort(400, 'Invalid token')
@@ -69,11 +69,11 @@ def verify_broadcaster(decoded_token):
 
 def update_twitch_rc(decoded_token, twitch_extension_version, rc):
     token_data = {
-        'exp': datetime.utcnow() + timedelta(minutes=1),
+        'exp': utcnow() + timedelta(minutes=1),
         'user_id': TWITCH_EXTENSION_OWNER_ID,
         'role': 'external',
     }
-    token = jwt.encode(token_data, TWITCH_EXTENSION_SECRET).decode("utf-8")
+    token = jwt.encode(token_data, TWITCH_EXTENSION_SECRET)
 
     url = 'https://api.twitch.tv/helix/extensions/required_configuration?broadcaster_id=' + decoded_token['channel_id']
 
@@ -102,7 +102,7 @@ def update_cached_dccon(channel):
     dccon_json, result_code = convert_dccon(channel.dccon_type, channel.dccon_url)
 
     channel.cached_dccon = dccon_json
-    channel.last_cache_update = datetime.utcnow()
+    channel.last_cache_update = utcnow()
 
     update_db()
 

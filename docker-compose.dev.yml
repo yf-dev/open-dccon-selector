@@ -1,4 +1,3 @@
-version: '2'
 services:
   db:
     image: postgres:9.6
@@ -14,6 +13,18 @@ services:
       - "POSTGRES_DB=open-dccon-selector"
       - "POSTGRES_USER=ods"
       - "LC_COLLATE=C"
+
+  imgproxy:
+    image: darthsim/imgproxy:v4.0.11
+    ports:
+      - "8090:8080"
+    restart: unless-stopped
+    env_file:
+      - settings.env
+      - settings.dev.env
+    environment:
+      - "IMGPROXY_MAX_ANIMATION_FRAMES=1"
+      - "IMGPROXY_ALLOWED_SOURCES=http://,https://"
 
   backend:
     build: ./backend
@@ -35,17 +46,19 @@ services:
       - ./log/nginx:/var/log/nginx
     restart: unless-stopped
 
-  imgproxy:
-    image: darthsim/imgproxy:v2.14.1
-    ports:
-      - "8090:8080"
-    restart: unless-stopped
+  frontend:
+    build: ./frontend
     env_file:
       - settings.env
-      - settings.dev.env
-    environment:
-      - "IMGPROXY_MAX_ANIMATION_FRAMES=1"
-      - "IMGPROXY_ALLOWED_SOURCES=http://,https://"
+    ports:
+      - "8089:8089"
+    command: "yarn dev"
+    volumes:
+      - ./frontend:/frontend
+      - ./backend/localhost-ssl.crt:/cert/localhost-ssl.crt:ro
+      - ./backend/localhost-ssl.key:/cert/localhost-ssl.key:ro
+      - node-modules:/frontend/node_modules
 
 volumes:
   db-data:
+  node-modules:

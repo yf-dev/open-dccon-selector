@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from flask import abort
-from flask_restful import Resource, reqparse
+from flask_restx import Resource, reqparse
 from sqlalchemy import exists
 
 from .common import verify_broadcaster, decode_twitch_token, update_twitch_rc, get_channel_by_user_id, \
@@ -9,10 +7,11 @@ from .common import verify_broadcaster, decode_twitch_token, update_twitch_rc, g
 from .. import api, db
 from ..consts import CACHED_DCCON_UPDATE_DELTA
 from ..models import Channel
+from ..utils import utcnow
 
 
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/channels')
+@api.route('/api/channels')
 class ApiChannels(Resource):
     def post(self):
         parser = reqparse.RequestParser()
@@ -38,7 +37,7 @@ class ApiChannels(Resource):
 
 
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/channel/<string:user_id>')
+@api.route('/api/channel/<string:user_id>')
 class ApiChannel(Resource):
     def put(self, user_id):
         def twitch_rc_dccon(dccon_url):
@@ -110,7 +109,7 @@ class ApiChannel(Resource):
 
 # note: If you edit url of cached dccon, you should change Channel.cached_dccon_url method too.
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/channel/<string:user_id>/cached-dccon')
+@api.route('/api/channel/<string:user_id>/cached-dccon')
 class ApiChannelCachedDccon(Resource):
     def get(self, user_id):
         channel = get_channel_by_user_id(user_id)
@@ -118,7 +117,7 @@ class ApiChannelCachedDccon(Resource):
         if not channel.last_cache_update:
             update_cached_dccon(channel)
         else:
-            utc_now = datetime.utcnow()
+            utc_now = utcnow()
             checkpoint = channel.last_cache_update + CACHED_DCCON_UPDATE_DELTA
             if checkpoint < utc_now:
                 update_cached_dccon(channel)
@@ -127,7 +126,7 @@ class ApiChannelCachedDccon(Resource):
 
 
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/channel/<string:user_id>/cached-dccon/update')
+@api.route('/api/channel/<string:user_id>/cached-dccon/update')
 class ApiChannelCachedDcconUpdate(Resource):
     def post(self, user_id):
         parser = reqparse.RequestParser()
@@ -150,7 +149,7 @@ class ApiChannelCachedDcconUpdate(Resource):
 
 # note: If you edit url of proxy dccon, you should change Channel.proxy_dccon_url method too.
 # noinspection PyMethodMayBeStatic
-@api.resource('/api/channel/<string:user_id>/proxy-dccon')
+@api.route('/api/channel/<string:user_id>/proxy-dccon')
 class ApiChannelProxyDccon(Resource):
     def get(self, user_id):
         channel = get_channel_by_user_id(user_id)
@@ -161,7 +160,7 @@ class ApiChannelProxyDccon(Resource):
             if not channel.last_cache_update:
                 update_cached_dccon(channel)
             else:
-                utc_now = datetime.utcnow()
+                utc_now = utcnow()
                 checkpoint = channel.last_cache_update + CACHED_DCCON_UPDATE_DELTA
                 if checkpoint < utc_now:
                     update_cached_dccon(channel)
